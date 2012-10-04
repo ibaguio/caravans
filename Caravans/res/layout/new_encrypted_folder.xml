@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="top"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="42dp"
+        android:layout_marginTop="38dp"
+        android:text="@string/folder_location"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/text_folder_address"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_below="@+id/textView1"
+        android:layout_marginTop="26dp"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/browse_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/text_folder_address"
+        android:layout_alignBottom="@+id/text_folder_address"
+        android:layout_marginLeft="42dp"
+        android:layout_toRightOf="@+id/textView1"
+        android:onClick="browseFolder"
+        android:text="@string/browse_folder" />
+
+    <TextView
+        android:id="@+id/text_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text_folder_address"
+        android:layout_below="@+id/browse_btn"
+        android:layout_marginTop="36dp"
+        android:text="@string/text_password"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+	<EditText
+	    android:id="@+id/edit_password"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/text_password"
+	    android:layout_below="@+id/text_password"
+	    android:layout_marginTop="23dp"
+	    android:ems="10"
+	    android:inputType="textPassword" />
+    
+	<TextView
+	    android:id="@+id/text_algorithm"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/edit_password"
+	    android:layout_alignRight="@+id/edit_password"
+	    android:layout_below="@+id/edit_password"
+	    android:layout_marginTop="31dp"
+	    android:text="@string/text_algorithm"
+	    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+	<Spinner
+        android:id="@+id/list_algorithms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/edit_password"
+        android:layout_alignTop="@+id/text_algorithm"
+        android:layout_marginRight="17dp" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text_algorithm"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="58dp"
+        android:onClick="createNewFolder"
+        android:text="@string/new_folder_btn" />
+    
+</RelativeLayout>
