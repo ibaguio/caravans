@@ -5,18 +5,24 @@ public class FolderLog {
 	private String foldername;
 	private String algorithm;
 	private long lastmodified;
-	
+	private String path;
 	public long getId(){
 		return this.id;
 	}
 	public void setId(long id){
 		this.id = id;
 	}
-	public String getFileName(){
+	public String getFolderName(){
 		return this.foldername;
 	}
-	public void setFileName(String filename){
-		this.foldername = filename;
+	public void setFolderName(String foldername){
+		this.foldername = foldername;
+	}
+	public String getPath(){
+		return this.path;
+	}
+	public void setPath(String path){
+		this.path = path;
 	}
 	public String getAlgorithm(){
 		return this.algorithm;

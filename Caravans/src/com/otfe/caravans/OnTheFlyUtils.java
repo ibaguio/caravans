@@ -4,23 +4,36 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.security.MessageDigest;
+import java.security.SecureRandom;
 import java.security.spec.KeySpec;
-import java.util.Arrays;
 
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import android.util.Log;
+
+
 public class OnTheFlyUtils{
     public static final String AES = "AES";
     public static final String EBC = "EBC";
+    public static final String TWO_FISH = "TWOFISH";
+    public static final String SERPENT = "SERPENT";
+    public static final String SPONGY = "SC";
+    public static final String SunJCE = "SunJCE";
 
     /* returns true if file exists and is not directory*/
     public static boolean validFile(File f){
         return !f.isDirectory() && f.isFile();
     }
 
+    public static String getProvider(String algo){
+        if (algo == "AES")
+        	return SunJCE;
+        return SPONGY;
+    }
+    
     public static String getFileType(File f) throws Exception{
         String filename = f.getName();
         String ext = "none";
@@ -29,8 +42,20 @@ public class OnTheFlyUtils{
             ext = filename.substring(i+1).toLowerCase();
         for (i=0;i<4-ext.length();i++)
             ext+=" ";
-        System.out.println("Filetype "+filename+" "+ext);
+        Log.d("OTF Utils","Filetype "+filename+" "+ext);
         return ext;
+    }
+
+    /* returns the filename without the extension
+     * ex. Filename = "test.txt" would return test
+     * */
+    public static String getRawFileName(File f){
+        String filename = f.getName();
+        int i = filename.lastIndexOf('.');
+        if (i<0)
+            return filename;
+        Log.d("OTF Utils","Filename: "+f.getName()+" RAW: "+filename.substring(0,i));
+        return filename.substring(0,i);
     }
 
     public static String[] extractFileInfo(String info){
@@ -45,7 +70,7 @@ public class OnTheFlyUtils{
         int s =size.length();
         for (int i = 0; i<8-s; i++)
             size = '0'+size;
-        System.out.println("File size " + f.getName() +" "+size);
+        Log.d("OTF Utils","File size " + f.getName() +" "+size);
         return size;
     }
 
@@ -58,29 +83,29 @@ public class OnTheFlyUtils{
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
         KeySpec spec = new PBEKeySpec(password, salt, 1024, 256);
         SecretKey tmp = factory.generateSecret(spec);
-        SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");
+        SecretKey secret = new SecretKeySpec(tmp.getEncoded(), AES);
         return secret;
     }
 
-    /* hash the password and get the first 16 chars*/
-    public static byte[] generateIV(String password) throws Exception{
-        MessageDigest md = MessageDigest.getInstance("MD5");
-        md.update(password.getBytes("UTF-8"));
-        byte[] hash = md.digest();
-        return Arrays.copyOfRange(hash, 0,16);
+    /* returns a random array of bytes*/
+    public static byte[] generateIV() throws Exception{
+        SecureRandom rand = new SecureRandom();
+        byte iv[] = new byte[16];
+        rand.nextBytes(iv);
+        return iv;
     }
 
-    public static byte[] read(InputStream in,int bytes, int offset) throws Exception{
+    public static byte[] read(FileInputStream in,int bytes, int offset) throws Exception{
         in.skip(offset);
-        System.out.println("Reading "+bytes+" bytes; offset "+offset+" available "+in.available());
+        Log.d("OTF Utils","Reading "+bytes+" bytes; offset "+offset+" available "+in.available());
         byte[] content = new byte[bytes];
-        Thread.sleep(500);
+        //Thread.sleep(500);
         in.read(content,0,bytes);
         return content;
     }
-    
+
     //http://stackoverflow.com/questions/304268/getting-a-files-md5-checksum-in-java
-    public static byte[] md5Sum(File f) throws Exception {
+    public static byte[] createChecksum(File f) throws Exception {
        InputStream fis =  new FileInputStream(f);
 
        byte[] buffer = new byte[1024];
@@ -95,11 +120,33 @@ public class OnTheFlyUtils{
        return md.digest();
    }
 
-   //byte to string
+   /* converts a byte to human readable string */
    public static String byteToString(byte[] b) throws Exception {
        String result = "";
        for (int i=0; i < b.length; i++) 
            result += Integer.toString( ( b[i] & 0xff ) + 0x100, 16).substring( 1 );
        return result;
    }
+
+   public static String getNewFilePath(File target, String parent, String extension){
+      if (parent == null)
+        return getRawFileName(target)+extension;
+      return parent+"/"+getRawFileName(target)+extension;
+   }
+   
+   //http://stackoverflow.com/questions/304268/getting-a-files-md5-checksum-in-java
+   public static byte[] md5Sum(File f) throws Exception {
+      InputStream fis =  new FileInputStream(f);
+
+      byte[] buffer = new byte[1024];
+      MessageDigest md = MessageDigest.getInstance("MD5");
+      int numRead;
+      do {
+          numRead = fis.read(buffer);
+          if (numRead > 0) 
+              md.update(buffer, 0, numRead);
+      } while (numRead != -1);
+      fis.close();
+      return md.digest();
+  }
 }

@@ -35,17 +35,31 @@ public class MainActivity extends Activity {
 	        case R.id.help_btn:
 	        	showHelp();
     			break;
+	        case R.id.service_btn:
+	        	startService();
+	        	break;
         }
     }
-    
     private void encryptSingle(){
     	Log.d("Main","Encrypting Single file");
     }
     private void decryptSingle(){
     	Log.d("Main","Decrypting Single file");
+    	Intent intent = new Intent(this,DecryptSingle.class);
+    	startActivity(intent);
     }
     private void showHelp(){
     	Log.d("Main","Show Help");
+    }
+    private void startService(){
+    	/*Log.d("Main","showing start service");
+    	Intent intent = new Intent(MainActivity.this,ServiceActivity.class);
+    	Log.d("Main","Intent created");
+    	startActivity(intent);
+    	Log.d("Main","OK");*/
+    	Log.d("Main","starting service");
+    	Intent intent = new Intent(this,FolderListenerDaemon.class);
+    	startService(intent);
     }
     
     private void newFolder(){

@@ -33,14 +33,24 @@
         android:layout_marginTop="20dp"
         android:onClick="onClick"
         android:text="@string/decryptFile" />
- 
     <Button
-        android:id="@+id/help_btn"
+        android:id="@+id/service_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/decrypt_btn"
         android:layout_alignRight="@+id/decrypt_btn"
         android:layout_below="@+id/decrypt_btn"
+        android:layout_marginTop="20dp"
+        android:onClick="onClick"
+        android:text="@string/show_folders" />
+    
+    <Button
+        android:id="@+id/help_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/service_btn"
+        android:layout_alignRight="@+id/service_btn"
+        android:layout_below="@+id/service_btn"
         android:layout_marginTop="20dp"
         android:onClick="onClick"
         android:text="@string/howTo" />

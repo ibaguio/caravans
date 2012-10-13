@@ -30,6 +30,15 @@
             android:name=".FileBrowser"
             android:label="@string/title_activity_main" >
         </activity>
+        <activity
+            android:name=".ServiceActivity"
+            android:label="@string/title_activity_main" >
+        </activity>
+        <activity
+            android:name=".DecryptSingle"
+            android:label="@string/title_activity_main" >
+        </activity>
+        <service android:name=".FolderListenerDaemon"/>
+        <service android:name=".DecryptionService"/>
     </application>
-
 </manifest>

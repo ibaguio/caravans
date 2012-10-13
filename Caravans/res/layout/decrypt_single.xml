@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tv1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="22dp"
+        android:text="@string/file_to_decrypt"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/file_to_decrypt"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv1"
+        android:layout_below="@+id/tv1"
+        android:layout_marginTop="17dp"/>
+
+    <Button
+        android:id="@+id/browse_for_decrypt_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/file_to_decrypt"
+        android:layout_alignBottom="@+id/file_to_decrypt"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="25dp"
+        android:text="@string/browse_folder"
+        android:onClick="onClick"/>
+    <TextView
+        android:id="@+id/tv2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/file_to_decrypt"
+        android:layout_below="@+id/browse_for_decrypt_btn"
+        android:layout_marginTop="37dp"
+        android:text="@string/dest_folder"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    <TextView
+        android:id="@+id/decrypt_dest"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv2"
+        android:layout_below="@+id/tv2"
+        android:layout_marginTop="20dp"/>
+    <Button
+        android:id="@+id/browse_for_dest_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/decrypt_dest"
+        android:layout_alignBottom="@+id/decrypt_dest"
+        android:layout_alignLeft="@+id/browse_for_decrypt_btn"
+        android:text="@string/browse_folder"
+        android:onClick="onClick" />
+
+    <TextView
+        android:id="@+id/tv3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/decrypt_dest"
+        android:layout_centerVertical="true"
+        android:text="@string/text_password"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/decrypt_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv3"
+        android:layout_below="@+id/tv3"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:inputType="textPassword" />
+
+    <Button
+        android:id="@+id/single_decrypt_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/decrypt_password"
+        android:layout_alignParentBottom="true"
+        android:onClick="onClick"
+        android:text="@string/single_decrypt" />
+
+    <TextView
+        android:id="@+id/tv4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/decrypt_password"
+        android:layout_below="@+id/decrypt_password"
+        android:layout_marginTop="20dp"
+        android:text="@string/text_algorithm"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Spinner
+        android:id="@+id/dec_algorithms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tv4"
+        android:layout_centerHorizontal="true" />
+    
+</RelativeLayout>

@@ -9,14 +9,16 @@ import android.util.Log;
 public class FolderLogHelper extends SQLiteOpenHelper {
 	public static final int DATABASE_VERSION = 1;
 	public static final String COLUMN_ID = "_id";
-	public static final String DATABASE_NAME = "otfelogger";
+	public static final String DATABASE_NAME = "otfelogger.db";
 	public static final String TABLE_NAME = "folderlogger";
 	public static final String COLUMN_FOLDERNAME = "foldername";
 	public static final String COLUMN_LASTMOD = "lastmodified";
 	public static final String COLUMN_ALGORITHM = "algorithm";
+	public static final String COLUMN_PATH = "path";
 	public static final String TABLE_CREATE = "CREATE TABLE " 
 			+ TABLE_NAME + "("+COLUMN_ID+" integer primary key autoincrement," +
 					COLUMN_FOLDERNAME + " TEXT not NULL, " +
+					COLUMN_PATH + " TEXT not NULL, " +
 					COLUMN_ALGORITHM + " TEXT not NULL," +
 					COLUMN_LASTMOD  + " INTEGER not NULL);";
 	
@@ -25,6 +27,7 @@ public class FolderLogHelper extends SQLiteOpenHelper {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		SQLiteDatabase db;
 		try {
+			Log.d("","Opening/creating database: "+DATABASE_NAME);
             db = context.openOrCreateDatabase(DATABASE_NAME, DATABASE_VERSION, null);
             Cursor c = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
             if (!tableExist(c)){
@@ -41,7 +44,9 @@ public class FolderLogHelper extends SQLiteOpenHelper {
 		Log.d("Folder LH","checking if "+TABLE_NAME+" exists");
 		if (c.moveToFirst()){
 	        while ( !c.isAfterLast() ){
-	        	if (c.getString( c.getColumnIndex("name")).equals(TABLE_NAME))
+	        	String x = c.getString( c.getColumnIndex("name"));
+	        	Log.d("","**"+x);
+	        	if (x.equals(TABLE_NAME))
 	        		return true;
 	        	c.moveToNext();
 	        }
@@ -51,9 +56,14 @@ public class FolderLogHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db){
-		Log.d("Database","Creating "+TABLE_NAME);
-		db.execSQL(TABLE_CREATE);
-		Log.d("Database","Craeted new table "+TABLE_NAME);
+		Log.d("Folder LH","Creating "+TABLE_NAME);
+		try{
+			db.execSQL(TABLE_CREATE);
+			Log.d("Folder LH","Created new table "+TABLE_NAME);
+		}catch(Exception e){
+			e.printStackTrace();
+			Log.d("Folder LH",""+e.toString());
+		}
 	}
 
 	@Override
@@ -66,8 +76,7 @@ public class FolderLogHelper extends SQLiteOpenHelper {
 	}
 	
 	public static String[] getAllColumns(){
-		String[] ret = {COLUMN_ID,COLUMN_FOLDERNAME,COLUMN_ALGORITHM,COLUMN_LASTMOD};
+		String[] ret = {COLUMN_ID,COLUMN_FOLDERNAME,COLUMN_PATH,COLUMN_ALGORITHM,COLUMN_LASTMOD};
 		return ret;
 	}
 }
-

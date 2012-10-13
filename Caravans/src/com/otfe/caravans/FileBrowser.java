@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
@@ -13,26 +15,28 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
 public class FileBrowser extends Activity{
 	public static final String GET_DIRECTORY = "GET_DIR";
-	
+	public static final String FILEPATH = "FILEPATH";
+	public static final String EXTERNAL_STORAGE = Environment.getExternalStorageDirectory().toString();
 	private ListView lv;
 	private String dir;
 	private boolean returnDirectory;
 	
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		Log.d("","Opening File browser");
+		Log.d("FileBrowser","Opening File browser");
         setContentView(R.layout.file_browser);
         lv = (ListView)findViewById(R.id.list);
         
         Intent intent = getIntent();
-        this.dir = intent.getStringExtra(NewEncryptedFolder.FILEPATH);
+        this.dir = intent.getStringExtra(FILEPATH);
         this.returnDirectory = intent.getBooleanExtra(GET_DIRECTORY,false);
-        
+        Log.d("FileBrowser","return directory: "+returnDirectory);
         if (checkExternalMedia()>0){
         	Log.d("Filebrowser","showing sd");
         	showSD();
@@ -40,21 +44,45 @@ public class FileBrowser extends Activity{
 	}
 	
 	public void makeDirectory(View view){
-		
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+		alert.setTitle("New Folder");
+		alert.setMessage("Enter Folder Name");
+
+		// Set an EditText view to get user input 
+		final EditText input = new EditText(this);
+		alert.setView(input);
+
+		alert.setPositiveButton("Create", new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int whichButton) {
+		  String value = input.getText().toString();
+		  boolean created = mkdir(value);
+		  Log.d("FileBrowser","Creating new Dir: "+created);
+		  }
+		});
+
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		  public void onClick(DialogInterface dialog, int whichButton) {
+		    // Canceled.
+		  }
+		});
+
+		alert.show();
 	}
+	
+	private boolean mkdir(String dirName){
+		File d = new File(dir+"/"+dirName);
+		return d.mkdir();
+	}
+	
 	private int checkExternalMedia(){
         String state = Environment.getExternalStorageState();
-
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            // Can read and write the media
-            return 2;
-        } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-            // Can only read the media
-            return 1;
-        } else {
-            // Can't read or write
-            return 0;
-        }   
+        if (Environment.MEDIA_MOUNTED.equals(state))
+            return 2;// Can read and write the media
+         else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) 
+            return 1;// Can only read the media
+         else 
+            return 0; // Can't read or write
     }
 	
 	private void showSD(){
@@ -62,25 +90,24 @@ public class FileBrowser extends Activity{
 		lv = (ListView)findViewById(R.id.list);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_item, dirs);
         lv.setAdapter(adapter);
-        registerForContextMenu(lv);
+        //registerForContextMenu(lv);
         
         lv.setOnItemClickListener(new OnItemClickListener(){
             public void onItemClick(AdapterView<?> parent, View view, int pos, long id){
-            	Log.d("","Click");
             	String filename = String.valueOf( ((TextView) view).getText());
-
+            	Log.d("FileBrowser","Click: "+filename);
                 String f = dir +"/"+ filename;
-                Log.d("","Filename: "+f);
                 
                 if (isDirectory(f)){//open directory
                 	Intent intent2 = new Intent(FileBrowser.this ,FileBrowser.class);
-                    intent2.putExtra(NewEncryptedFolder.FILEPATH, f);
+                    intent2.putExtra(FILEPATH, f);
                     intent2.putExtra(GET_DIRECTORY, returnDirectory);
-                	startActivity(intent2);	
+                    FileBrowser.this.startActivityForResult(intent2,0);	
                 }else{
                 	if (!returnDirectory){//return nondir filepath
                 		Intent data = new Intent();
-                    	data.putExtra(NewEncryptedFolder.FILEPATH, f);
+                		Log.d("FileBrowser","returning nondir "+f);
+                    	data.putExtra(FILEPATH, f);
                     	returnData(data);	
                 	}
                 }
@@ -91,16 +118,16 @@ public class FileBrowser extends Activity{
         	public boolean onItemLongClick(AdapterView<?> parent, View view, int pos, long id){
         		String filename = String.valueOf( ((TextView) view).getText());
         		String f = dir +"/"+ filename;
-        		Log.d("","Loooong Click "+filename+"*");
+        		Log.d("FileBrowser","Loooong Click "+filename+"*");
         		
-        		File file = new File(f);
-        		if (file.isDirectory() && returnDirectory){
+        		//File file = new File(f);
+        		//if (file.isDirectory() && returnDirectory){
         			Intent data = new Intent();
                 	data.putExtra("FILEPATH", f);
                 	returnData(data);
                 	return true;
-        		}
-        		return false;
+        		//}
+        		//return false;
         	}
         });
 	}
@@ -120,7 +147,6 @@ public class FileBrowser extends Activity{
 	public void onActivityResult(int requestCode, int resultCode, Intent data){
 		Log.d("File BROWSER","Passing back data\nreq code: "+requestCode+" ret code: "+resultCode);
 		returnData(data);
-    	
 	}
 	
     private String[] getSubFiles(String filename){

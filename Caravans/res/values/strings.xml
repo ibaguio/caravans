@@ -11,9 +11,22 @@
     <string name="text_password">Password</string>
     <string name="text_algorithm">Algorithm</string>
     <string name="new_folder_btn">New Encrypted Folder</string>
+    <string name="show_folders">Encrypted Folders</string>
+    <string name="file_to_decrypt">File to Decrypt:</string>
+    <string name="dest_folder">Destination Folder:</string>
+    <string name="single_decrypt">Decrypt File</string> 
+    <string name="mkdir">New Directory</string>
     
     <string-array name="algorithms">
         <item>AES</item>
         <item>Two Fish</item>
+        <item>Serpent</item>
+    </string-array>
+    
+	<string-array name="algorithms_with_auto">
+	    <item>Auto</item>
+        <item>AES</item>
+        <item>Two Fish</item>
+        <item>Serpent</item>
     </string-array>
 </resources>

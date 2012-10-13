@@ -35,9 +35,10 @@ public class FolderLoggerDataSource {
 	public FolderLog createFolderLog(File f, String algorithm){
 		ContentValues values = new ContentValues();
 		values.put(FolderLogHelper.COLUMN_FOLDERNAME, f.getName());
+		values.put(FolderLogHelper.COLUMN_PATH, f.getAbsolutePath());	
 		values.put(FolderLogHelper.COLUMN_LASTMOD, f.lastModified());
 		values.put(FolderLogHelper.COLUMN_ALGORITHM, algorithm);
-		Log.d("Folder LDS","Creating new folder log\nFilename: "+f.getName()+"\nAlgo: " +
+		Log.d("Folder LDS","Creating new folder log\nFilename: "+f.getName()+"\nPath: "+f.getAbsolutePath()+"\nAlgo: " +
 				algorithm + "\nLastMod: "+f.lastModified());
 		
 		long insertId = database.insert(FolderLogHelper.TABLE_NAME,null,values);
@@ -47,7 +48,7 @@ public class FolderLoggerDataSource {
 		Log.d("Folder LDS","query completed");
 		cursor.moveToFirst();
 		Log.d("Folder LDS","moved to first");
-		FolderLog newFileLog = cursorToFileLog(cursor);
+		FolderLog newFileLog = cursorToFolderLog(cursor);
 		Log.d("Folder LDS","created new file log");
 		cursor.close();
 		return newFileLog;
@@ -59,25 +60,30 @@ public class FolderLoggerDataSource {
 		database.delete(FolderLogHelper.TABLE_NAME, FolderLogHelper.COLUMN_ID + " = " +id,null);
 	}
 
-	public List<FolderLog> getAllFileLogs(){
-		List<FolderLog> fileLogs = new ArrayList<FolderLog>();
-		
+	public List<FolderLog> getAllFolderLogs(){
+		Log.d("Folder LDS","Getting all folderLog");
+		List<FolderLog> folderLogs = new ArrayList<FolderLog>();
 		Cursor cursor = database.query(FolderLogHelper.TABLE_NAME,allColumns,null,null,null,null,null);
+		Log.d("Folder LDS","Folderlog count: "+cursor.getCount());
 		cursor.moveToFirst();
 		while(!cursor.isAfterLast()){
-			FolderLog folderLog = cursorToFileLog(cursor);
-			fileLogs.add(folderLog);
+			FolderLog folderLog = cursorToFolderLog(cursor);
+			folderLogs.add(folderLog);
 			cursor.moveToNext();
 		}
-		return fileLogs;
+		Log.d("Folder LDS","returning folderLogs, count: "+folderLogs.size());
+		return folderLogs;
 	}
-	
-	private FolderLog cursorToFileLog(Cursor cursor){
+	private FolderLog cursorToFolderLog(Cursor cursor){
+		Log.d("Folder LDS","Converting cursor to folderLog");
 		FolderLog folderLog = new FolderLog();
 		folderLog.setId(cursor.getLong(0));
-		folderLog.setFileName(cursor.getString(1));
-		folderLog.setAlgorithm(cursor.getString(2));
-		folderLog.setLastModified(cursor.getLong(3));
+		folderLog.setFolderName(cursor.getString(1));
+		folderLog.setPath(cursor.getString(2));
+		folderLog.setAlgorithm(cursor.getString(3));
+		folderLog.setLastModified(cursor.getLong(4));
+		Log.d("Folder LDS","ID: "+cursor.getLong(0)+"\nFolderName: "+cursor.getString(1)+"\nPath: "+cursor.getString(2)
+				+"\nAlgo: "+cursor.getString(3)+"\nLastmod: "+cursor.getLong(4));
 		return folderLog;
 	}
 }

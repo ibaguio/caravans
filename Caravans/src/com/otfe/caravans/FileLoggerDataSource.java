@@ -12,13 +12,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 public class FileLoggerDataSource {
+	private String TABLE_NAME;
 	private SQLiteDatabase database;
 	private FileLogHelper dbHelper;
 	private String[] allColumns = FileLogHelper.getAllColumns();
 	
-	public FileLoggerDataSource(Context context){
-		Log.d("File LDS","New Instance created");
-		dbHelper = new FileLogHelper(context);
+	public FileLoggerDataSource(Context context,String foldername){
+		Log.d("File LDS","New Instance created; foldername: "+foldername);
+		TABLE_NAME = FileLogHelper.BASE_NAME + foldername.toLowerCase();
+		dbHelper = new FileLogHelper(context,foldername);
 	}
 	
 	public void open() throws SQLException{
@@ -49,14 +51,15 @@ public class FileLoggerDataSource {
 		Log.d("File LDS","Filename "+f.getName()+"\nchecksum: "+checksum
 				+"\nfiletype: "+filetype+ "\nfilesize: "+f.length());
 		
-		values.put(FileLogHelper.COLUMN_FILENAME, f.getName());
+		values.put(FileLogHelper.COLUMN_FILENAME, OnTheFlyUtils.getRawFileName(f));
 		values.put(FileLogHelper.COLUMN_CHECKSUM, checksum);
 		values.put(FileLogHelper.COLUMN_FILESIZE, f.length());
 		values.put(FileLogHelper.COLUMN_LASTMOD, f.lastModified());
-		values.put(FileLogHelper.COLUMN_FILETYPE, filetype);
+		if (filetype!=null)
+			values.put(FileLogHelper.COLUMN_FILETYPE, filetype);
 		
-		long insertId = database.insert(FileLogHelper.TABLE_NAME,null,values);
-		Cursor cursor = database.query(FileLogHelper.TABLE_NAME, allColumns, 
+		long insertId = database.insert(TABLE_NAME,null,values);
+		Cursor cursor = database.query(TABLE_NAME, allColumns, 
 				FileLogHelper.COLUMN_ID + " = " + insertId,null,null,null,null);
 		cursor.moveToFirst();
 		FileLog newFileLog = cursorToFileLog(cursor);
@@ -68,13 +71,13 @@ public class FileLoggerDataSource {
 		long id = fileLog.getId();
 		Log.d("File LDS","Deleting fileLog with id: "+id);
 		Log.d("File LDS",fileLog.toString());
-		database.delete(FileLogHelper.TABLE_NAME, FileLogHelper.COLUMN_ID + " = " +id,null);
+		database.delete(TABLE_NAME, FileLogHelper.COLUMN_ID + " = " +id,null);
 	}
 	
 	public List<FileLog> getAllFileLogs(){
 		List<FileLog> fileLogs = new ArrayList<FileLog>();
 		
-		Cursor cursor = database.query(FileLogHelper.TABLE_NAME,allColumns,null,null,null,null,null);
+		Cursor cursor = database.query(TABLE_NAME,allColumns,null,null,null,null,null);
 		cursor.moveToFirst();
 		while(!cursor.isAfterLast()){
 			FileLog fileLog = cursorToFileLog(cursor);
@@ -82,6 +85,16 @@ public class FileLoggerDataSource {
 			cursor.moveToNext();
 		}
 		return fileLogs;
+	}
+	
+	public FileLog getFileLog(String filename){
+		Cursor c = database.rawQuery("SELECT * FROM "+TABLE_NAME+" WHERE "+FileLogHelper.COLUMN_FILENAME + " = '"+filename+"'", null);
+		c.moveToFirst();
+		if (c.getCount()==0){
+			Log.d("File LDS",filename+" is not found in table"+TABLE_NAME);
+			return null;
+		}
+		return cursorToFileLog(c);
 	}
 	
 	private FileLog cursorToFileLog(Cursor cursor){
@@ -92,7 +105,6 @@ public class FileLoggerDataSource {
 		fileLog.setFileSize(cursor.getLong(3));
 		fileLog.setLastModified(cursor.getLong(4));
 		fileLog.setFileType(cursor.getString(5));
-		
 		return fileLog;
 	}
 }
