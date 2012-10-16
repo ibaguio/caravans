@@ -73,6 +73,8 @@ public class DecryptSingle extends Activity{
 						intent.putExtra(DecryptionService.SRC_FILEPATH, target.getAbsolutePath());
 						intent.putExtra(DecryptionService.DEST_FILEPATH, dest_folder.getAbsolutePath());
 						intent.putExtra(DecryptionService.PASSWORD, password);
+						intent.putExtra(DecryptionService.ALGORITHM, algorithm);
+						intent.putExtra(DecryptionService.CHECKSUM, getStoredChecksum());
 						Log.d("DecryptSingle","Starting Service");
 						startService(intent);
 					}else
@@ -113,7 +115,7 @@ public class DecryptSingle extends Activity{
 	private String verifyAlgorithm(){
 		SQLiteDatabase db = this.openOrCreateDatabase(FileLogHelper.DATABASE_NAME,
 				FileLogHelper.DATABASE_VERSION, null);
-		String query = "SELECT algorithm FROM folderlogger WHERE foldername='"+getParentFolder()+"';";
+		String query = "SELECT algorithm FROM folderlogger WHERE path='"+target.getParentFile()+"';";
 		Log.d("DecryptSingle","Query: "+query);
 		String algo="";
 		try{
@@ -129,4 +131,22 @@ public class DecryptSingle extends Activity{
 		return algo;
 	}
 
+	private String getStoredChecksum(){
+		SQLiteDatabase db = this.openOrCreateDatabase(FileLogHelper.DATABASE_NAME,
+				FileLogHelper.DATABASE_VERSION, null);
+		String query = "SELECT checksum FROM folderlogger_"+target.getParentFile().getName()+" WHERE filename='"+target+"';";
+		Log.d("DecryptSingle","Query: "+query);
+		String checksum="";
+		try{
+		Cursor c = db.rawQuery(query,null);
+		c.moveToFirst();
+		Log.d("","got cursor "+c.getCount());
+		if (c.getCount()==1)
+			checksum = c.getString(0);
+		}catch(Exception e){
+			Log.d("DecryptSingle",""+e.getMessage());
+		}
+		Log.d("DecryptSingle","checksum: "+checksum);
+		return checksum;
+	}
 }

@@ -19,11 +19,13 @@ public class DecryptionService extends Service {
 	public static final String SRC_FILEPATH = "SRC";
 	public static final String DEST_FILEPATH = "DEST";
 	public static final String ALGORITHM = "ALGO";
+	public static final String CHECKSUM = "CHECK";
 	
 	private String src_filepath;
 	private String dest_filepath;
 	private String algo;
 	private String password;
+	private String checksum;
 	
 	public final class ServiceHandler extends Handler{
 		public ServiceHandler(Looper looper) {
@@ -32,8 +34,9 @@ public class DecryptionService extends Service {
 	    @Override
 	    public void handleMessage(Message msg) {
 	    	Log.d("DecryptionService","Decrypting "+src_filepath+" to "+dest_filepath+"...");
-	    	OnTheFlyDecryptor otfd = new OnTheFlyDecryptor(password, src_filepath ,dest_filepath,OnTheFlyUtils.TWO_FISH);
+	    	OnTheFlyDecryptor otfd = new OnTheFlyDecryptor(password, src_filepath ,dest_filepath,algo);
 	  	  	otfd.decrypt();
+	  	  	Log.d("DecryptionService","CHECKSUM VERIFICATION: "+otfd.verifyChecksum(checksum));
 	  	  	Log.d("DecryptionService","Decrypted!");
 	        stopSelf(msg.arg1);
 	    }
@@ -55,8 +58,9 @@ public class DecryptionService extends Service {
 		
 		src_filepath = intent.getStringExtra(SRC_FILEPATH);
 		dest_filepath = intent.getStringExtra(DEST_FILEPATH);
-		algo = "AES";
+		algo = intent.getStringExtra(ALGORITHM);
 		password = intent.getStringExtra(PASSWORD);
+		checksum = intent.getStringExtra(CHECKSUM);
 		
 		Toast.makeText(getApplicationContext(), "service starting", Toast.LENGTH_SHORT).show();
 		Message msg = mServiceHandler.obtainMessage();

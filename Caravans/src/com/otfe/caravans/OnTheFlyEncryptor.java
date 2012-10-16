@@ -23,6 +23,7 @@ public class OnTheFlyEncryptor{
     private byte[] headers;
     private final int blockSize = 16;
     private boolean ok = true;
+    private final String TAG = "OTF Encryptor";
     
     static {
         Security.addProvider(new org.spongycastle.jce.provider.BouncyCastleProvider());
@@ -30,17 +31,19 @@ public class OnTheFlyEncryptor{
     
     public OnTheFlyEncryptor(String password, String filepath, String algo){
         try{
+        	Log.d(TAG,"PASSWORD:"+password);
             toEncrypt = new File(filepath);
             secretKey = OnTheFlyUtils.getKey(password.toCharArray());
             algorithm = algo;
             provider = OnTheFlyUtils.getProvider(algo);
             iv = OnTheFlyUtils.generateIV();
+            Log.d(TAG,"IV:"+OnTheFlyUtils.byteToString(iv));
             if (!OnTheFlyUtils.validFile(toEncrypt))
                 ok = false;
         }catch(Exception e){
             e.printStackTrace();
         }
-        Log.d("OTF Encryptor","New OTFE algo: "+algo+"\nprovider: "+provider);
+        Log.d(TAG,"New OTFE algo: "+algo+"\nprovider: "+provider);
     }
 
     public boolean isReady(){
@@ -58,29 +61,29 @@ public class OnTheFlyEncryptor{
         }
         return true;
     }
+    
     private void newEncryptedFile() throws Exception{
-        Log.d("OTF Encryptor","Creating new encrypted file");
+        Log.d(TAG,"Creating new encrypted file");
         String enc_file_path = OnTheFlyUtils.getNewFilePath(toEncrypt,toEncrypt.getParent(),".enc");
         String fileInfo = OnTheFlyUtils.getFileType(toEncrypt) + OnTheFlyUtils.getFileSize(toEncrypt);
         
-        Log.d("OTF Encryptor","Fileinfo "+fileInfo);
+        Log.d(TAG,"NEW ENC FILE DEST: "+enc_file_path);
+        Log.d(TAG,"Fileinfo "+fileInfo);
 
-        byte[] enc_true = encryptEBC(secretKey, "TRUE".getBytes(), algorithm);
-        byte[] enc_info = encryptEBC(secretKey, fileInfo.getBytes(),algorithm);
+        byte[] xtrue = "TRUE".getBytes();
+        byte[] xinfo = fileInfo.getBytes();
 
+        Log.d(TAG,"true.len: "+xtrue.length+" xinfo.len: "+xinfo.length+" total: "+(xinfo.length+xtrue.length));
         /* encrypted file info to be written at start of cipher File */
-        byte[] toWrite = new byte[blockSize*3];
-        
-        Log.d("OTF Encryptor","Wrote "+enc_true.length+" bytes (enc_true)");
-        Log.d("OTF Encryptor","Wrote "+enc_info.length+" bytes (enc_info)");
-        Log.d("OTF Encryptor","Wrote "+iv.length+" bytes (enc_iv)");
-        
-        System.arraycopy(iv,0,toWrite,0,blockSize);//append encrypted "TRUE"
-        System.arraycopy(enc_true,0,toWrite,blockSize,blockSize);//append encrypted file info
-        System.arraycopy(enc_info,0,toWrite,2*blockSize,blockSize);//append IV
-        headers = toWrite;
-        
+        byte[] toWrite = new byte[blockSize];
         FileOutputStream encFos = new FileOutputStream(enc_file_path);
+
+        encFos.write(iv);
+        //System.arraycopy(iv,0,toWrite,0,blockSize);//append encrypted "TRUE"
+        System.arraycopy(xtrue,0,toWrite,0,xtrue.length);//append encrypted file info
+        System.arraycopy(xinfo,0,toWrite,xtrue.length,xinfo.length);//append IV
+        headers = toWrite;
+        Log.d(TAG,"HEADERS:"+OnTheFlyUtils.byteToString(headers));
         CipherInputStream cin = setEncrypt();
         int i, size = 0;
         while ((i=cin.read())!=-1){
@@ -88,26 +91,15 @@ public class OnTheFlyEncryptor{
             size+=1;
         }
         encFos.close();
-        Log.d("OTF Encryptor","Wrote "+(size)+ " bytes (enc_data)");
-        Log.d("OTF Encryptor","TOTAL: "+(toWrite.length+size)+" bytes");
-        Log.d("OTF Encryptor","Deleting "+toEncrypt.getName() +toEncrypt.delete());
-    }
-    
-    /*returns encrypted value of plain text using EBC mode*/
-    private byte[] encryptEBC(SecretKey key, byte[] ptxt, String algorithm) throws Exception{
-        /* Encrypt the message. */
-        Log.d("OTF Encryptor","Encrypting EBC");
-        Cipher cipher = Cipher.getInstance(algorithm,provider);
-        cipher.init(Cipher.ENCRYPT_MODE, key);
-        byte[] cipherText = cipher.doFinal(ptxt);
-        Log.d("OTF Encryptor","EBC input size "+ptxt.length+ " output size "+cipherText.length);
-        return cipherText;
+        Log.d(TAG,"Wrote "+(size)+ " bytes (enc_data)");
+        Log.d(TAG,"TOTAL: "+(toWrite.length+size)+" bytes");
+        Log.d(TAG,"Deleting "+toEncrypt.getName() +toEncrypt.delete());
     }
 
     private CipherInputStream setEncrypt() throws Exception{
-        Log.d("OTF Encryptor","Setting main encryption");
+        Log.d(TAG,"Setting main encryption");
         if (headers == null)
-        	return null;
+            return null;
         ByteArrayInputStream bias = new ByteArrayInputStream(headers);
         SequenceInputStream sis = new SequenceInputStream(bias,new FileInputStream(toEncrypt));
         

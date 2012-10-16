@@ -84,10 +84,10 @@ public class NewEncryptedFolder extends Activity{
 			setupFolder(dir, algorithm);
 			
 			Intent intent = new Intent(this, FolderListenerDaemon.class);
-			intent.putExtra(FolderListenerDaemon.PASSWORD, "ivandominic");
+			intent.putExtra(FolderListenerDaemon.PASSWORD, password);
 			intent.putExtra(FolderListenerDaemon.TARGET, dir_name);
 			intent.putExtra(FolderListenerDaemon.ALGORITHM, algorithm);
-			
+
 			startService(intent);
 		}else{
 			Toast.makeText(this, "Not a valid folder", Toast.LENGTH_SHORT).show();

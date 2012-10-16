@@ -14,7 +14,6 @@ import javax.crypto.spec.SecretKeySpec;
 
 import android.util.Log;
 
-
 public class OnTheFlyUtils{
     public static final String AES = "AES";
     public static final String EBC = "EBC";
@@ -22,6 +21,8 @@ public class OnTheFlyUtils{
     public static final String SERPENT = "SERPENT";
     public static final String SPONGY = "SC";
     public static final String SunJCE = "SunJCE";
+    
+    private static final String TAG = "OnTheFlyUtils";
 
     /* returns true if file exists and is not directory*/
     public static boolean validFile(File f){
@@ -30,7 +31,7 @@ public class OnTheFlyUtils{
 
     public static String getProvider(String algo){
         if (algo == "AES")
-        	return SunJCE;
+          return SunJCE;
         return SPONGY;
     }
     
@@ -42,7 +43,7 @@ public class OnTheFlyUtils{
             ext = filename.substring(i+1).toLowerCase();
         for (i=0;i<4-ext.length();i++)
             ext+=" ";
-        Log.d("OTF Utils","Filetype "+filename+" "+ext);
+        Log.d(TAG,"Filetype "+filename+" "+ext);
         return ext;
     }
 
@@ -54,7 +55,7 @@ public class OnTheFlyUtils{
         int i = filename.lastIndexOf('.');
         if (i<0)
             return filename;
-        Log.d("OTF Utils","Filename: "+f.getName()+" RAW: "+filename.substring(0,i));
+        Log.d(TAG,"Filename: "+f.getName()+" RAW: "+filename.substring(0,i));
         return filename.substring(0,i);
     }
 
@@ -70,7 +71,7 @@ public class OnTheFlyUtils{
         int s =size.length();
         for (int i = 0; i<8-s; i++)
             size = '0'+size;
-        Log.d("OTF Utils","File size " + f.getName() +" "+size);
+        Log.d(TAG,"File size " + f.getName() +" "+size);
         return size;
     }
 
@@ -97,10 +98,11 @@ public class OnTheFlyUtils{
 
     public static byte[] read(FileInputStream in,int bytes, int offset) throws Exception{
         in.skip(offset);
-        Log.d("OTF Utils","Reading "+bytes+" bytes; offset "+offset+" available "+in.available());
+        Log.d(TAG,"Reading "+bytes+" bytes; offset "+offset+" available "+in.available());
         byte[] content = new byte[bytes];
         //Thread.sleep(500);
         in.read(content,0,bytes);
+        in.close();
         return content;
     }
 
@@ -128,6 +130,7 @@ public class OnTheFlyUtils{
        return result;
    }
 
+   
    public static String getNewFilePath(File target, String parent, String extension){
       if (parent == null)
         return getRawFileName(target)+extension;
@@ -149,4 +152,12 @@ public class OnTheFlyUtils{
       fis.close();
       return md.digest();
   }
+   
+   public static String getParentFolder(File target){
+	    String path = target.getAbsolutePath();
+	    String ret = path.substring(0,path.lastIndexOf("/"));
+	    System.out.println("RET:"+ret+"\nPath:"+path);
+
+	    return ret;
+   }
 }

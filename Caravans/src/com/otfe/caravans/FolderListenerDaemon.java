@@ -21,6 +21,7 @@ public class FolderListenerDaemon extends Service{
 	private File target;
 	private FileLoggerDataSource fld2;
 	private String password;
+	private String algorithm;
 	private Looper mServiceLooper;
 	private ServiceHandler mServiceHandler;
 	
@@ -35,7 +36,7 @@ public class FolderListenerDaemon extends Service{
 		        //while (System.currentTimeMillis() < endTime) {
 	  	  		synchronized (this) {
 	  	  			try {
-	  	  				Log.d("wait","["+i+"]waiting for 3 seconds");
+	  	  				//Log.d("wait","["+i+"]waiting for 3 seconds");
 	  	  				wait(endTime - System.currentTimeMillis());
 		                if (checkChanges()){
 		                	Log.d("Daemon","modification detected");
@@ -60,13 +61,12 @@ public class FolderListenerDaemon extends Service{
 	    		}
 	    		fileLog = fld2.getFileLog( OnTheFlyUtils.getRawFileName(f));
 	    		if (fileLog == null){
-	    			Log.d("Folder LDS","New File detected, "+OnTheFlyUtils.getRawFileName(f));
+	    			//Log.d("Folder LDS","New File detected, "+OnTheFlyUtils.getRawFileName(f));
 	    			fld2.createFileLog(f);
 
 	    			Log.d("Folder LDS","Starting EDT");
-	    			EncryptorDaemonThread edt = new EncryptorDaemonThread(f,password);
+	    			EncryptorDaemonThread edt = new EncryptorDaemonThread(f,password,algorithm);
 	    			new Thread(edt).run();
-	    			stopSelf();
 	    			Log.d("Folder LDS","encryptor service started");
 	    			return true;
 	    		}
@@ -94,6 +94,7 @@ public class FolderListenerDaemon extends Service{
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.d("Folder LDS","onStartCommand");
 		password = intent.getStringExtra(PASSWORD);
+		algorithm = intent.getStringExtra(ALGORITHM);
 		String path = intent.getStringExtra(TARGET);
 		target = new File(path);
 		if (!target.isDirectory()){
