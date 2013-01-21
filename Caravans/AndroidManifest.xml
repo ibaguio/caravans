@@ -31,9 +31,13 @@
             android:label="@string/title_decrypt_single">
         </activity>
 		<activity
-            android:name=".SettingsActivity">
+            android:name=".SettingsActivity"
+            android:label="@string/title_settings">
+        </activity>        
+		<activity
+            android:name=".performance_test.PerformanceTestActivity"
+            android:label="@string/performance_test">
         </activity>
-        
         <activity 
             android:name="group.pals.android.lib.ui.filechooser.FileChooserActivity" 
             android:configChanges="orientation|screenSize|keyboard|keyboardHidden" />
@@ -42,7 +46,9 @@
 
         <service android:name=".FolderListenerService"/>
         <service android:name=".DecryptionService"/>
-        <service android:name="com.otfe.performance_test.PerformanceTestService"/>
+        <service android:name=".DecryptionIntentService"/>
+        <service android:name=".EncryptionIntentService"/>
+        <service android:name=".performance_test.PerformanceTestService"/>
         <service android:name="group.pals.android.lib.ui.filechooser.services.LocalFileProvider" />
     </application>
 </manifest>

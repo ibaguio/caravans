@@ -28,7 +28,7 @@
 	    android:layout_toRightOf="@id/new_enc_folder_btn"
 	    android:onClick="onClick"
 	    android:src="@drawable/encrypt"
-	    android:contentDescription="@string/encryptFile"/>
+	    android:contentDescription="@string/encrypt_file"/>
 	
 	<ImageButton
         android:id="@+id/decrypt_btn"
@@ -40,7 +40,7 @@
         android:layout_marginTop="20dp"
         android:onClick="onClick"
         android:src="@drawable/decrypt"
-        android:contentDescription="@string/decryptFile"/>
+        android:contentDescription="@string/decrypt_file"/>
 	
 	<ImageButton
         android:id="@+id/folders_btn"

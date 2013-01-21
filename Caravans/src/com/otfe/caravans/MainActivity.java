@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import com.otfe.performance_test.PerformanceTestService;
+import com.otfe.caravans.performance_test.PerformanceTestService;
 
 /* Main activity for Caravans*/
 public class MainActivity extends Activity {

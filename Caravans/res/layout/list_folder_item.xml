@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/main_background">
+    
+	<!-- ID of folder in SQL, hidden -->
+    <TextView
+        android:id="@+id/folder_id"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+    
+    <LinearLayout
+        android:id="@+id/layout_"
+        android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content"
+    	android:weightSum="1.0">
+    	
+		<!-- Folder name -->
+	    <TextView 
+	        android:id="@+id/folder_name"
+	        android:layout_width="0dp"
+	        android:layout_weight=".65"
+	        android:layout_height="wrap_content"
+	        android:textSize="16dip"
+	        android:textColor="@string/white"
+	        android:paddingTop="12dip"
+	        android:paddingBottom="7dip"
+	        android:paddingLeft="13dip"
+	        android:textStyle="bold"/>
+    
+		<!-- Listening text -->
+	    <TextView 
+	        android:layout_width="0dp"
+	        android:layout_weight=".19"
+	        android:layout_height="wrap_content"
+	        android:textSize="12dip"
+	        android:textColor="@string/color_grey"
+	        android:paddingTop="13dip"
+	        android:paddingBottom="7dip"
+	        android:text="@string/text_listening"/>
+	    
+		<!-- ON/OFF text -->
+	    <TextView 
+	        android:id="@+id/folder_encrypting"
+	        android:layout_width="0dp"
+	        android:layout_weight=".16"
+	        android:layout_height="wrap_content"
+	        android:textSize="16dip"
+	        android:paddingTop="12dip"
+	        android:paddingBottom="7dip"
+	        android:textStyle="bold"/>
+	    
+	    
+    </LinearLayout>
+	<!-- Folder path -->
+    <TextView android:id="@+id/folder_path"
+    	android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_"
+        android:textColor="@string/color_grey"
+        android:textStyle="bold"
+        android:paddingLeft="13dip"
+        android:paddingBottom="2dip"
+        android:paddingTop="1dip"/>
+
+</RelativeLayout>

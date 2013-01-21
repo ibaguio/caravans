@@ -10,8 +10,8 @@ import android.os.Message;
 import android.os.Process;
 import android.util.Log;
 
-import com.otfe.crypto.Encryptor;
-import com.otfe.performance_test.PerformanceTester;
+import com.otfe.caravans.crypto.Encryptor;
+import com.otfe.caravans.performance_test.PerformanceTester;
 
 public class EncryptionService extends Service{
 	private Looper mServiceLooper;

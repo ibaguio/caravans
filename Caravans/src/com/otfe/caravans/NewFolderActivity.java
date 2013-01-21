@@ -20,9 +20,9 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.otfe.crypto.Utility;
-import com.otfe.database.FileLoggerDataSource;
-import com.otfe.database.FolderLoggerDataSource;
+import com.otfe.caravans.crypto.Encryptor;
+import com.otfe.caravans.database.FileLoggerDataSource;
+import com.otfe.caravans.database.FolderLoggerDataSource;
 
 /**
  * Creates an OTF encrypted folder to be monitored
@@ -51,7 +51,7 @@ public class NewFolderActivity extends Activity{
 	 */
 	public void browseFolder(View view){
     	Intent intent = new Intent(this,FileChooserActivity.class);
-    	intent.putExtra(FileChooserActivity._Rootpath, (Parcelable) new LocalFile(Utility.SDCARD));
+    	intent.putExtra(FileChooserActivity._Rootpath, (Parcelable) new LocalFile(Constants.SDCARD));
     	intent.putExtra(FileChooserActivity._FilterMode, IFileProvider.FilterMode.DirectoriesOnly);
     	startActivityForResult(intent, GET_FOLDERPATH);
 	}
@@ -83,6 +83,7 @@ public class NewFolderActivity extends Activity{
 		    	TextView tv = (TextView)this.findViewById(R.id.tv_pattern);
 		    	if (resultCode == RESULT_OK) {
 		    		pattern = data.getStringExtra(LockPatternActivity._Pattern);
+		    		Log.d(TAG, "Pattern: "+pattern);
 		    		tv.setText("Pattern is SET!");
 		    	}else if (resultCode == RESULT_CANCELED && pattern=="")
 		    		tv.setText("Pattern is NOT SET!");
@@ -138,11 +139,11 @@ public class NewFolderActivity extends Activity{
 		/* set the final algorithm to be used for enc/dec */
 		String algorithm = "";
 		if (algo == R.id.radio_aes_nef)
-			algorithm = Utility.AES;
+			algorithm = Constants.AES;
 		else if (algo ==R.id.radio_two_fish_nef)
-			algorithm = Utility.TWO_FISH;
+			algorithm = Constants.TWO_FISH;
 		else if (algo == R.id.radio_serpent_nef)
-			algorithm = Utility.SERPENT;
+			algorithm = Constants.SERPENT;
 		else{
 			Toast.makeText(this, "Please select an Algorithm to use", Toast.LENGTH_SHORT).show();
 			return 0;
@@ -153,7 +154,7 @@ public class NewFolderActivity extends Activity{
 		Log.d(TAG,"Algo: "+algorithm);
 			
 		Toast.makeText(this, "Created new OnTheFly Folder", Toast.LENGTH_SHORT).show();
-		setupFolder(dir, algorithm);
+		setupFolder(dir, algorithm,fPass);
 		
 		/* setup the intent */
 		otfe_intent = new Intent(this, FolderListenerService.class);
@@ -196,11 +197,11 @@ public class NewFolderActivity extends Activity{
 	 * @param f
 	 * @param algorithm
 	 */
-	private void setupFolder(File f, String algorithm){
+	private void setupFolder(File f, String algorithm, String password){
 		Log.d(TAG,"Setting up folder database");
 		FileLoggerDataSource file_ds = new FileLoggerDataSource(this,f.getName());
 		/* Adds the newly set up otfe folder to the FolderLog table */
-		this.folder_ds.createFolderLog(f,algorithm);
+		this.folder_ds.createFolderLog(f,algorithm,Encryptor.generateVerifyHash(password,algorithm));
 		/* Creates a new table that lists the files in the folder */
 		file_ds.open();
 		/* close data sources */

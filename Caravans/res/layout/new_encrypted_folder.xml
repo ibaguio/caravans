@@ -193,21 +193,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="@string/aes"
+            android:text="@string/algorithm_aes"
             android:textColor="#dddddd" />
 
         <RadioButton
             android:id="@+id/radio_two_fish_nef"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/twofish"
+            android:text="@string/algorithm_twofish"
             android:textColor="#dddddd" />
 
         <RadioButton
             android:id="@+id/radio_serpent_nef"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/serpent"
+            android:text="@string/algorithm_serpent"
             android:textColor="#dddddd" />
     </RadioGroup>
 

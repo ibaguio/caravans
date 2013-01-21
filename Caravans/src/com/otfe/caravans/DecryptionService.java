@@ -10,8 +10,8 @@ import android.os.Process;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.otfe.crypto.Decryptor;
-import com.otfe.performance_test.PerformanceTester;
+import com.otfe.caravans.crypto.Decryptor;
+import com.otfe.caravans.performance_test.PerformanceTester;
 
 /**
  * Service that decrypts the target

@@ -4,8 +4,8 @@ import java.io.File;
 
 import android.util.Log;
 
-import com.otfe.crypto.Encryptor;
-import com.otfe.performance_test.PerformanceTester;
+import com.otfe.caravans.crypto.Encryptor;
+import com.otfe.caravans.performance_test.PerformanceTester;
 
 public class EncryptorDaemonThread implements Runnable{
 	public static final String PASSWORD = "PASS";

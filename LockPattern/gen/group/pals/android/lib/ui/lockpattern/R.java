@@ -43,11 +43,13 @@ public final class R {
         public static int alp_lockscreen_access_pattern_start=0x7f050007;
         public static int alp_msg_connect_4dots=0x7f050008;
         public static int alp_msg_draw_an_unlock_pattern=0x7f050009;
+        public static int alp_msg_draw_pattern_to_continue=0x7f05000b;
         public static int alp_msg_draw_pattern_to_unlock=0x7f05000a;
-        public static int alp_msg_pattern_recorded=0x7f05000b;
-        public static int alp_msg_redraw_pattern_to_confirm=0x7f05000c;
-        public static int alp_msg_release_finger_when_done=0x7f05000d;
-        public static int alp_msg_try_again=0x7f05000e;
-        public static int alp_msg_your_new_unlock_pattern=0x7f05000f;
+        public static int alp_msg_pattern_recorded=0x7f05000c;
+        public static int alp_msg_redraw_pattern_to_confirm=0x7f05000d;
+        public static int alp_msg_release_finger_when_done=0x7f05000e;
+        public static int alp_msg_try_again=0x7f05000f;
+        public static int alp_msg_your_new_unlock_pattern=0x7f050010;
+        public static int alp_msg_your_unlock_pattern=0x7f050011;
     }
 }

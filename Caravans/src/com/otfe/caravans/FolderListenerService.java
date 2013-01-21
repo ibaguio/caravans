@@ -17,9 +17,9 @@ import android.os.Process;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.otfe.crypto.Utility;
-import com.otfe.database.FileLog;
-import com.otfe.database.FileLoggerDataSource;
+import com.otfe.caravans.crypto.Utility;
+import com.otfe.caravans.database.FileLog;
+import com.otfe.caravans.database.FileLoggerDataSource;
 
 public class FolderListenerService extends Service{
 	public static final String PASSWORD = "PASS";

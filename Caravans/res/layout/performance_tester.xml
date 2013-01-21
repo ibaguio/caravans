@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_background"
+    android:padding="10dp"
+    android:orientation="vertical">
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="37dp" >
+
+    	<TextView
+	        android:layout_width="95dp"
+	        android:layout_height="wrap_content"
+	        android:text="@string/fsize_to_test"
+	        android:textColor="#dddddd"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+	    <EditText
+	        android:id="@+id/file_size"
+	        android:layout_width="70dp"
+	        android:layout_height="25dp"
+	        android:layout_marginLeft="10dp"
+	        android:paddingLeft="10dp"
+        	android:paddingRight="10dp"
+	        android:textSize="13dp"
+	        android:inputType="numberSigned" 
+	        android:background="@drawable/input_style"/>
+	    
+    	<Spinner
+    	    android:id="@+id/size_spinner"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="42dp"
+    	    android:textColor="#dddddd"
+	        android:layout_marginLeft="10dp"
+    	    android:prompt="@string/fsize_to_test"
+    	    android:entries="@array/file_sizes"/>
+	</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="37dp" 
+        android:layout_marginTop="5dp">
+
+    	<TextView
+	        android:layout_width="95dp"
+	        android:layout_height="wrap_content"
+	        android:text="@string/number_of_tests"
+	        android:textColor="#dddddd"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+    	
+    	<EditText
+	        android:id="@+id/test_count"
+	        android:layout_width="70dp"
+	        android:layout_height="25dp"
+	        android:layout_marginLeft="10dp"
+	        android:paddingLeft="10dp"
+        	android:paddingRight="10dp"
+	        android:textSize="13dp"
+	        android:inputType="numberSigned" 
+	        android:background="@drawable/input_style"/>
+	</LinearLayout>
+    
+    <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="5dp"
+	        android:textColor="#dddddd"
+	        android:text="@string/dest_folder"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+    
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+	    <TextView
+	        android:id="@+id/performance_test_dest"
+	        android:layout_width="243dp"
+	        android:layout_height="30dp"
+	        android:layout_marginTop="6dp"
+	        android:paddingLeft="10dp"
+	        android:paddingRight="5dp"
+	        android:background="@drawable/input_style"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+		    
+		<ImageButton
+	        android:id="@+id/browse_for_dest_btn"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="10dp"
+	        android:contentDescription="@string/search"
+	        android:onClick="browseFolder"
+	        android:src="@drawable/search" />
+    </LinearLayout>
+    
+	<Button
+	    android:id="@+id/run_performance_test"
+		android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="10dp" 
+	    android:text="@string/run_performance_test"
+	    android:onClick="runPerfTest"/>	
+</LinearLayout>

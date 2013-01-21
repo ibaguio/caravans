@@ -87,7 +87,13 @@ public class LockPatternActivity extends Activity {
         /**
          * Compares to existing pattern.
          */
-        ComparePattern
+        ComparePattern,
+        /**
+         * Just get the pattern string w/o
+         * verification
+         * added by ibaguio
+         */
+        GetPattern
     }
 
     /**
@@ -154,7 +160,7 @@ public class LockPatternActivity extends Activity {
         if (mMode == null)
             mMode = LPMode.CreatePattern;
 
-        mMaxRetry = getIntent().getIntExtra(_MaxRetry, 5);
+        mMaxRetry = getIntent().getIntExtra(_MaxRetry, 3);
 
         // set this to false by default, for security enhancement
         mAutoSave = getIntent().getBooleanExtra(_AutoSave, false);
@@ -206,8 +212,8 @@ public class LockPatternActivity extends Activity {
         // haptic feedback
         boolean hapticFeedbackEnabled = false;
         try {
-            hapticFeedbackEnabled = Settings.System.getInt(getContentResolver(),
-                    Settings.System.HAPTIC_FEEDBACK_ENABLED, 0) != 0;
+            hapticFeedbackEnabled = Settings.System.getInt(getContentResolver(), 
+            		Settings.System.HAPTIC_FEEDBACK_ENABLED, 0) != 0;
         } catch (Throwable t) {
             // ignore it
         }
@@ -220,6 +226,7 @@ public class LockPatternActivity extends Activity {
         // COMMAND BUTTONS
 
         switch (mMode) {
+        case GetPattern:
         case CreatePattern:
             mBtnCancel.setOnClickListener(mBtnCancelOnClickListener);
             mBtnConfirm.setOnClickListener(mBtnConfirmOnClickListener);
@@ -332,6 +339,18 @@ public class LockPatternActivity extends Activity {
         }
     }// doCreatePattern()
 
+    private void doGetPattern(List<Cell> pattern){
+    	if (pattern.size() < 4) {
+            mLockPatternView.setDisplayMode(DisplayMode.Wrong);
+            mTxtInfo.setText(R.string.alp_msg_connect_4dots);
+            return;
+        }
+    	mLastPattern = new ArrayList<LockPatternView.Cell>();
+    	mLastPattern.addAll(pattern);
+    	mTxtInfo.setText(R.string.alp_msg_your_unlock_pattern);
+    	mBtnConfirm.setText(R.string.alp_cmd_confirm);
+        mBtnConfirm.setEnabled(true);
+    }
     private final LockPatternView.OnPatternListener mPatternViewListener = new LockPatternView.OnPatternListener() {
 
         @Override
@@ -355,6 +374,8 @@ public class LockPatternActivity extends Activity {
             case ComparePattern:
                 doComparePattern(pattern);
                 break;
+            case GetPattern:
+            	doGetPattern(pattern);
             }
         }// onPatternDetected()
 
@@ -374,6 +395,9 @@ public class LockPatternActivity extends Activity {
             case ComparePattern:
                 mTxtInfo.setText(R.string.alp_msg_draw_pattern_to_unlock);
                 break;
+            case GetPattern:
+            	mTxtInfo.setText(R.string.alp_msg_draw_pattern_to_continue);
+            	break;
             }
         }// onPatternCleared()
 

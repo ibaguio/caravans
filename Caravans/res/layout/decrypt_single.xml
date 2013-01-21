@@ -15,7 +15,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         android:text="@string/file_to_decrypt"
         android:textColor="#dddddd"
         android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -29,8 +29,8 @@
         android:layout_marginTop="7dp"
         android:paddingLeft="10dp"
         android:paddingRight="5dp"
-        android:background="@drawable/input_style"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:paddingTop="3dp"
+        android:background="@drawable/input_style"/>
    
 	<ImageButton
         android:id="@+id/browse_for_decrypt_btn"
@@ -39,10 +39,10 @@
         android:layout_alignParentRight="true"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_marginTop="49.5dp"
+        android:layout_marginTop="44dp"
         android:layout_toRightOf="@id/file_to_decrypt"
         android:contentDescription="@string/search"
-        android:onClick="browseFolder"
+        android:onClick="onClick"
         android:src="@drawable/search" />
 	
 	<TextView
@@ -65,8 +65,8 @@
         android:layout_marginTop="7dp"
         android:paddingLeft="10dp"
         android:paddingRight="5dp"
-        android:background="@drawable/input_style"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:paddingTop="3dp"
+        android:background="@drawable/input_style"/>
 	    
 	<ImageButton
         android:id="@+id/browse_for_dest_btn"
@@ -78,7 +78,7 @@
         android:layout_marginTop="135dp"
         android:layout_toRightOf="@id/decrypt_dest"
         android:contentDescription="@string/search"
-        android:onClick="browseFolder"
+        android:onClick="onClick"
         android:src="@drawable/search" />
 	
     <TextView
@@ -87,41 +87,43 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/tv1"
         android:layout_marginTop="18dp"
-        android:text="@string/text_password"
+        android:text="@string/text_select_security_input"
         android:layout_below="@id/decrypt_dest"
         android:textColor="#dddddd"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-	<EditText
-        android:id="@+id/decrypt_password"
-        android:layout_width="230dp"
-        android:layout_height="30dp"
+    <LinearLayout android:id="@+id/layout_pass_patt"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_alignLeft="@id/tv1"
         android:layout_below="@id/tv3"
         android:layout_marginTop="7dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="5dp"
-        android:ems="10"
-        android:background="@drawable/input_style"
-        android:inputType="textPassword" />
+        android:layout_marginRight="6dp">
+        
+        <Button
+            android:id="@+id/password_btn"
+            android:layout_width="0dp"
+        	android:layout_weight="1"
+        	android:layout_height="wrap_content"
+            android:text="@string/text_password"
+            android:onClick="onClick"/>
+        
+        <Button
+            android:id="@+id/pattern_btn"
+            android:layout_width="0dp"
+       	 	android:layout_weight="1"
+        	android:layout_height="wrap_content"
+            android:text="@string/text_pattern"
+            android:onClick="onClick"/>
+        
+    </LinearLayout>
 
-			<ImageButton
-	            android:id="@+id/browse_pattern"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_alignParentRight="true"
-	            android:layout_marginRight="5dp"
-	            android:layout_alignBottom="@id/decrypt_password"
-	            android:contentDescription="@string/search"
-	            android:onClick="showPattern"
-	            android:src="@drawable/pattern" />
-			
-	<TextView
-        android:id="@+id/tv4"
+	<TextView android:id="@+id/tv4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tv1"
-        android:layout_below="@id/decrypt_password"
+        android:layout_below="@+id/layout_pass_patt"
         android:layout_marginTop="18dp"
         android:text="@string/text_algorithm"
         android:textColor="#dddddd"
@@ -138,14 +140,14 @@
 		<RadioButton android:id="@+id/radio_auto"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="@string/auto"
+			android:text="@string/algorithm_auto"
 			android:checked="true"
 			android:textColor="#dddddd"/>
 		
 		<RadioButton android:id="@+id/radio_aes2"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="@string/aes"
+			android:text="@string/algorithm_aes"
 			android:textColor="#dddddd"/>
 	</RadioGroup>
 	
@@ -160,13 +162,13 @@
 	    <RadioButton android:id="@+id/radio_two_fish2"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="@string/twofish"
+			android:text="@string/algorithm_twofish"
 			android:textColor="#dddddd"/>
 	    
 		<RadioButton android:id="@+id/radio_serpent2"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="@string/serpent"
+			android:text="@string/algorithm_serpent"
 			android:textColor="#dddddd"/>
 	</RadioGroup>
     <Button
@@ -175,7 +177,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/tv1"
         android:layout_marginBottom="15dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="15dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:onClick="onClick"

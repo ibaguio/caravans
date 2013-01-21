@@ -5,4 +5,7 @@
 	    <item name="android:textColor">?android:attr/textColorPrimary</item>
 	    <item name="android:textStyle">bold</item>
 	</style>
+	<style name="LightText">
+    	<item name="android:textColor">#ffffff</item>
+  	</style>
 </resources>
