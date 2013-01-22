@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.otfe.caravans.Constants;
+
 /**
  * FileLog database helper
  * creates the SQLite database for the list of
@@ -13,7 +15,7 @@ import android.util.Log;
  * @author baguio
  */
 public class FileLogHelper extends SQLiteOpenHelper{
-	public static final int DATABASE_VERSION = 1;
+	
 	public static final String COLUMN_ID = "_id";
 	public static String TARGET_NAME = "";
 	private String TABLE_NAME;
@@ -34,7 +36,7 @@ public class FileLogHelper extends SQLiteOpenHelper{
 					COLUMN_FILETYPE + " TEXT)";
 	
 	public FileLogHelper(Context context, String foldername){
-		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		super(context, DATABASE_NAME, null, Constants.DATABASE_VERSION);
 		Log.d("File LH","TARGET: "+foldername);
 		TARGET_NAME = foldername.toLowerCase();
 		TABLE_NAME = BASE_NAME + TARGET_NAME;
@@ -43,7 +45,7 @@ public class FileLogHelper extends SQLiteOpenHelper{
 		SQLiteDatabase db;
 		try {
 			Log.d("","Opening/creating database: "+DATABASE_NAME);
-            db = context.openOrCreateDatabase(DATABASE_NAME, DATABASE_VERSION, null);
+            db = context.openOrCreateDatabase(DATABASE_NAME, Constants.DATABASE_VERSION, null);
             Cursor c = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
             if (!tableExist(c)){
             	Log.d("File LH",TABLE_NAME+ " does not yet exist, creating it");
@@ -60,7 +62,6 @@ public class FileLogHelper extends SQLiteOpenHelper{
 		if (c.moveToFirst()){
 	        while ( !c.isAfterLast() ){
 	        	String x = c.getString( c.getColumnIndex("name"));
-	        	Log.d("","**"+x);
 	        	if (x.equals(TABLE_NAME))
 	        		return true;
 	        	c.moveToNext();

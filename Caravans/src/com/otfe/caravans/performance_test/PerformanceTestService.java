@@ -51,6 +51,7 @@ public class PerformanceTestService extends Service{
 	private ServiceHandler mServiceHandler;
 	private final String  TAG = "PerformanceTest"; 
 	private final String password = "testpassword";
+	
 	private final int OK = 1;
 	private final int FAIL = 2;
 	
@@ -62,7 +63,6 @@ public class PerformanceTestService extends Service{
 	
 	private BufferedWriter bw;
 	private NotificationManager mNotificationManager;
-	//private NotificationCompat.Builder nbuilder;
 	private Notification noti;
 	private int NOTIFICATION_ID = 0;
 	
@@ -73,19 +73,22 @@ public class PerformanceTestService extends Service{
 	
 	/* flag if decryption test shall be done */
 	private boolean do_decrypt = true;
+
 	public final class ServiceHandler extends Handler{
-		private int max = test_count*6;
+		private int max = test_count * 6;
     	private int progress = 0;
     	private Encryptor otfe;
 		private Decryptor otfd;
     	private PerformanceTester pt;
+    	
 		public ServiceHandler(Looper looper){ 
 	        super(looper);
 	    }
 
 	    @Override
 	    public void handleMessage(Message msg) {
-	    	Log.d(TAG,"loop");
+	    	new Thread(){
+	    		public void run(){	
 	    	try{
 	    		test_result.createNewFile();
 	    		FileWriter fw = new FileWriter(test_result);
@@ -154,6 +157,7 @@ public class PerformanceTestService extends Service{
 	    		e.printStackTrace();
 	    		endService(FAIL);
 	    	}
+	    	}}.run();
 	    }
 	}
 	
@@ -175,6 +179,7 @@ public class PerformanceTestService extends Service{
 		mNotificationManager.notify(NOTIFICATION_ID+1,nb.build());
 		stopSelf();
 	}
+	
 	private String getDeviceInfo(){
 		return "Device Information***\n" +
     			"Board:\t" + android.os.Build.BOARD +"\n"+
@@ -224,20 +229,6 @@ public class PerformanceTestService extends Service{
 			bw.flush();
 			bw.close();
 		}catch(Exception e){}
-		//mNotificationManager.cancel(NOTIFICATION_ID);
-		
-		/* notify finished test 
-		CharSequence title = "Performance Test Finished";
-		CharSequence text = "Results at: "+test_result.getPath();
-		int icon = R.drawable.lock;
-		long when = System.currentTimeMillis();
-		
-		Intent noti_intent = new Intent(this, MainActivity.class);
-		PendingIntent content_intent = PendingIntent.getActivity(this, 0, noti_intent, 0);
-		Notification noti = new Notification(icon, text, when);
-		noti.flags = Notification.FLAG_ONLY_ALERT_ONCE;
-		noti.setLatestEventInfo(this, title, text, content_intent);
-		mNotificationManager.notify(NOTIFICATION_ID, noti);*/
 	}
 	/**
 	 * setups the notification
@@ -264,20 +255,6 @@ public class PerformanceTestService extends Service{
 		noti.contentView = contentView;
 		noti.contentIntent = content_intent;
 		
-		/*
-		nbuilder = new NotificationCompat.Builder(this);
-		nbuilder.setOngoing(true)
-			//.setProgress(100, 0, false)
-			//.setContentTitle(title)
-			//.setContentText(text)
-			.setSmallIcon(icon)
-			.setWhen(when)
-			.setContentIntent(content_intent)
-			.setPriority(Notification.PRIORITY_DEFAULT)
-			.setTicker(text)
-			.setContent(contentView)
-			;
-		updateNotification(100,0);*/
 		mNotificationManager.notify(NOTIFICATION_ID,noti);
 	}
 	

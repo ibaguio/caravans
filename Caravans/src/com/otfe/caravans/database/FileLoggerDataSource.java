@@ -14,6 +14,7 @@ import android.util.Log;
 import com.otfe.caravans.crypto.Utility;
 
 public class FileLoggerDataSource {
+	private static final String TAG = "FileLoggerDS";
 	private String TABLE_NAME;
 	private SQLiteDatabase database;
 	private FileLogHelper dbHelper;
@@ -90,7 +91,9 @@ public class FileLoggerDataSource {
 	}
 	
 	public FileLog getFileLog(String filename){
-		Cursor c = database.rawQuery("SELECT * FROM "+TABLE_NAME+" WHERE "+FileLogHelper.COLUMN_FILENAME + " = '"+filename+"'", null);
+		String query = "SELECT * FROM "+TABLE_NAME+" WHERE "+FileLogHelper.COLUMN_FILENAME + " = '"+filename+"'";
+		Log.d(TAG, "Getting file Log\nquery: "+query);
+		Cursor c = database.rawQuery(query, null);
 		c.moveToFirst();
 		if (c.getCount()==0){
 			Log.d("File LDS",filename+" is not found in table"+TABLE_NAME);

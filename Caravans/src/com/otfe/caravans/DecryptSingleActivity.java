@@ -81,7 +81,7 @@ public class DecryptSingleActivity extends Activity{
 		this.rg2 = (RadioGroup)this.findViewById(R.id.radioGroup_algo3);
 		
 		this.db = this.openOrCreateDatabase(FileLogHelper.DATABASE_NAME,
-				FileLogHelper.DATABASE_VERSION, null);
+				Constants.DATABASE_VERSION, null);
 
 		/* set auto as the default algorithm */
 		this.algorithm = R.id.radio_auto;

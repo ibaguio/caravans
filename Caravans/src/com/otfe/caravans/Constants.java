@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.os.Environment;
+import android.os.FileObserver;
 
 /**
  * 
@@ -24,7 +25,6 @@ public final class Constants {
     public static final List<String> ALGORITHMS = Arrays.asList(new String[] {AES,TWO_FISH,SERPENT});
     
 	public static final String SETTINGS_NAME = "Caravans_Settings";
-	public static final String SETTINGS_DEFAULT_ENCRYPT_INTERVAL = "3000"; //in milliseconds
 	public static final int SETTINGS_MODE = Activity.MODE_MULTI_PROCESS;
 	public static final boolean SETTINGS_DEFAULT_POWER_SAVING = true;
 	public static final boolean SETTINGS_DEBUG_MODE = true;
@@ -43,7 +43,9 @@ public final class Constants {
 	public static final int TASK_GET_DEST_FOLDER = 3;
 	public static final int TASK_MAKE_PATTERN = 4;
 	public static final int TASK_FOLDER_LISTEN = 5;
+	public static final int TASK_FOLDER_OBSERVE = 5;
 	
+	/* KEYS */
 	public static final String KEY_PASSWORD = "pass";
 	public static final String KEY_TARG_FILE = "targ_file";
 	public static final String KEY_DEST_FOLDER = "dest_folder";
@@ -51,4 +53,15 @@ public final class Constants {
 	public static final String KEY_CHECKSUM = "chechsum";
 	public static final String KEY_TEST_COUNT = "test_count";
 	public static final String KEY_FILE_SIZE = "file_size";
+	public static final String KEY_ROW_ID = "row_id";
+	
+	public static int OBSERVER_EVENTS = FileObserver.CREATE +FileObserver.DELETE_SELF +
+			FileObserver.MOVE_SELF + FileObserver.MOVED_TO + FileObserver.MOVED_FROM;
+	
+	/* DATABASE */
+	public static final int DATABASE_VERSION = 1;
+	
+	/* OTHER */
+	public static final int NOTIFICATION_ID = 0;
+	
 }

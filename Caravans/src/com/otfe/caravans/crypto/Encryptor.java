@@ -87,7 +87,7 @@ public class Encryptor{
             iv = Utility.generateIV(blockSize);
             if (!toEncrypt.isFile()){
             	ready = false;
-            	Log.d(TAG, "File to be encrypted is not valid");
+            	Log.d(TAG, "File "+toEncrypt.getPath()+" is not valid");
             }
         }catch(Exception e){
             e.printStackTrace();

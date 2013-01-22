@@ -42,8 +42,18 @@ public class MainActivity extends Activity {
 	        case R.id.settings_btn:
 	        	showSettings();
 	        	break;
+	        case R.id.folders_btn:
+	        	showFolders();
+	        	break;
         }
     }
+    
+    private void showFolders(){
+    	Log.d(TAG, "Showing folders");
+    	Intent intent = new Intent(this, ViewFoldersActivity.class);
+    	startActivity(intent);
+    }
+    
     private void encryptSingle(){
     	Log.d(TAG,"Encrypting Single file");
     }

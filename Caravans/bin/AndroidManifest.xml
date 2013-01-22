@@ -7,6 +7,7 @@
         android:minSdkVersion="9"
         android:targetSdkVersion="15"/>
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -36,7 +37,11 @@
         </activity>        
 		<activity
             android:name=".performance_test.PerformanceTestActivity"
-            android:label="@string/performance_test">
+            android:label="@string/title_performance_test">
+        </activity>
+        <activity
+            android:name=".ViewFoldersActivity"
+            android:label="@string/title_view_folders">
         </activity>
         <activity 
             android:name="group.pals.android.lib.ui.filechooser.FileChooserActivity" 
@@ -44,10 +49,10 @@
     	<activity android:name="group.pals.android.lib.ui.lockpattern.LockPatternActivity"
     		android:configChanges="orientation|screenSize|keyboard|keyboardHidden" />
 
-        <service android:name=".FolderListenerService"/>
         <service android:name=".DecryptionService"/>
         <service android:name=".DecryptionIntentService"/>
         <service android:name=".EncryptionIntentService"/>
+        <service android:name=".FolderObserverIntentService"/>
         <service android:name=".performance_test.PerformanceTestService"/>
         <service android:name="group.pals.android.lib.ui.filechooser.services.LocalFileProvider" />
     </application>

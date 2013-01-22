@@ -6,7 +6,7 @@
     android:background="@drawable/main_background">
     
     <Button android:id="@+id/perf_test_button" 
-        android:text="@string/performance_test"
+        android:text="@string/title_performance_test"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"

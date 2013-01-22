@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@drawable/main_background">
+    android:orientation="vertical">
     
 	<!-- ID of folder in SQL, hidden -->
     <TextView
@@ -25,7 +24,7 @@
 	        android:layout_weight=".65"
 	        android:layout_height="wrap_content"
 	        android:textSize="16dip"
-	        android:textColor="@string/white"
+	        android:textColor="#ffffff"
 	        android:paddingTop="12dip"
 	        android:paddingBottom="7dip"
 	        android:paddingLeft="13dip"
@@ -37,7 +36,7 @@
 	        android:layout_weight=".19"
 	        android:layout_height="wrap_content"
 	        android:textSize="12dip"
-	        android:textColor="@string/color_grey"
+	        android:textColor="#aaaaaa"
 	        android:paddingTop="13dip"
 	        android:paddingBottom="7dip"
 	        android:text="@string/text_listening"/>
@@ -50,9 +49,9 @@
 	        android:layout_height="wrap_content"
 	        android:textSize="16dip"
 	        android:paddingTop="12dip"
+	        android:textColor="#55AA22"
 	        android:paddingBottom="7dip"
 	        android:textStyle="bold"/>
-	    
 	    
     </LinearLayout>
 	<!-- Folder path -->
@@ -60,7 +59,7 @@
     	android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/layout_"
-        android:textColor="@string/color_grey"
+        android:textColor="#aaaaaa"
         android:textStyle="bold"
         android:paddingLeft="13dip"
         android:paddingBottom="2dip"

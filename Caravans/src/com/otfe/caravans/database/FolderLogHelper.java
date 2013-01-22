@@ -5,12 +5,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import com.otfe.caravans.Constants;
 /**
  * SQLite Helper for FolderLogs
  * @author Ivan Dominic Baguio
  */
 public class FolderLogHelper extends SQLiteOpenHelper {
-	public static final int DATABASE_VERSION = 1;
 	public static final String COLUMN_ID = "_id";
 	public static final String DATABASE_NAME = "otfelogger.db";
 	public static final String TABLE_NAME = "folderlogger";
@@ -27,11 +28,11 @@ public class FolderLogHelper extends SQLiteOpenHelper {
 					"UNIQUE("+COLUMN_PATH+"));";
 	
 	public FolderLogHelper(Context context){
-		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		super(context, DATABASE_NAME, null, Constants.DATABASE_VERSION);
 		SQLiteDatabase db;
 		try {
 			Log.d("","Opening/creating database: "+DATABASE_NAME);
-            db = context.openOrCreateDatabase(DATABASE_NAME, DATABASE_VERSION, null);
+            db = context.openOrCreateDatabase(DATABASE_NAME, Constants.DATABASE_VERSION, null);
             Cursor c = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
             if (!tableExist(c)){
             	Log.d("Folder LH",TABLE_NAME+ " does not yet exist, creating it");

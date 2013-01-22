@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.otfe.caravans.crypto.Encryptor;
 import com.otfe.caravans.database.FileLoggerDataSource;
+import com.otfe.caravans.database.FolderLog;
 import com.otfe.caravans.database.FolderLoggerDataSource;
 
 /**
@@ -38,6 +39,8 @@ public class NewFolderActivity extends Activity{
 	private String pattern="";
 	private FolderLoggerDataSource folder_ds;
 	private Intent otfe_intent;
+	private Bundle extras;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -96,7 +99,7 @@ public class NewFolderActivity extends Activity{
 	 * create new folder is clicked
 	 * @param view
 	 */
-	public int createNewFolder(View view){
+	public void createNewFolder(View view){
 		TextView tv_dir = ((TextView) findViewById(R.id.text_folder_address));
 		String dir_name = tv_dir.getText().toString();
 		
@@ -105,7 +108,7 @@ public class NewFolderActivity extends Activity{
 		if (!dir.isDirectory() || !dir.canWrite()){
 			Toast.makeText(this, "Not a valid folder", Toast.LENGTH_SHORT).show();
 			Log.d(TAG,"Not a valid folder");
-			return 0;
+			return;
 		}
 		
 		/* final password to use */
@@ -116,7 +119,7 @@ public class NewFolderActivity extends Activity{
 		if (!this.folder_ds.isNewFolder(dir_name)){
 			Toast.makeText(this, "The selected folder is already target for on the fly encryption", Toast.LENGTH_LONG).show();
 			tv_dir.setText("");
-			return 0;
+			return;
 		}
 		/* password/pattern verification */
 		else if (fPass==null){
@@ -127,10 +130,10 @@ public class NewFolderActivity extends Activity{
 			tv = (TextView) findViewById(R.id.edit_password2);
 			tv.setText("");
 			pattern=""; //reset pattern
-			return 0;
+			return;
 		}else if (fPass.isEmpty()){
 			Toast.makeText(this, "Please select a password or pattern", Toast.LENGTH_SHORT).show();
-			return 0;
+			return;
 		}
 		/* get the selected Radio Button Id */
 		RadioGroup rg = (RadioGroup)this.findViewById(R.id.radioGroup_algo_nef);
@@ -146,29 +149,27 @@ public class NewFolderActivity extends Activity{
 			algorithm = Constants.SERPENT;
 		else{
 			Toast.makeText(this, "Please select an Algorithm to use", Toast.LENGTH_SHORT).show();
-			return 0;
+			return;
 		}
 			
-		Log.d(TAG,"Password: "+fPass);
-		Log.d(TAG,"Folder: "+dir_name);
-		Log.d(TAG,"Algo: "+algorithm);
+		Log.d(TAG,"Password: "+fPass+"\nFolder: "+dir_name+"\nAlgo: "+algorithm);
 			
-		Toast.makeText(this, "Created new OnTheFly Folder", Toast.LENGTH_SHORT).show();
-		setupFolder(dir, algorithm,fPass);
+		Toast.makeText(this, "Created new OTF Encrypted Folder", Toast.LENGTH_SHORT).show();
+		int _id = setupFolder(dir, algorithm,fPass);
 		
-		/* setup the intent */
-		otfe_intent = new Intent(this, FolderListenerService.class);
-		otfe_intent.putExtra(FolderListenerService.PASSWORD, fPass);
-		otfe_intent.putExtra(FolderListenerService.TARGET, dir_name);
-		otfe_intent.putExtra(FolderListenerService.ALGORITHM, algorithm);
-		
+		/* setup the Bundles */
+		extras = new Bundle();
+		extras.putString(Constants.KEY_PASSWORD, fPass);
+		extras.putString(Constants.KEY_TARG_FILE, dir_name);
+		extras.putString(Constants.KEY_ALGORITHM, algorithm);
+		extras.putInt(Constants.KEY_ROW_ID, _id);
+
 		/* create dialog to prompt user to start encryption service now */
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage("Run encryption service on target folder now?")
 			.setPositiveButton("Yes", startOtfeDialogListener)
 			.setNegativeButton("No", startOtfeDialogListener)
 			.setTitle("Run Encryption Now?").show();
-		return 0;
 	}
 	
 	/**
@@ -181,8 +182,7 @@ public class NewFolderActivity extends Activity{
 		String password = ((TextView) findViewById(R.id.edit_password)).getText().toString();
 		String password2 = ((TextView) findViewById(R.id.edit_password2)).getText().toString();
 		
-		Log.d(TAG,"PASS: *"+password+"*");
-		Log.d(TAG,"PAS2: *"+password2+"*");
+		Log.d(TAG,"PASS: *"+password+"*\nPAS2: *"+password2+"*");
 		if (password.isEmpty() && password2.isEmpty()){
 			if (!this.pattern.isEmpty())
 				return this.pattern;
@@ -197,16 +197,18 @@ public class NewFolderActivity extends Activity{
 	 * @param f
 	 * @param algorithm
 	 */
-	private void setupFolder(File f, String algorithm, String password){
+	private int setupFolder(File f, String algorithm, String password){
 		Log.d(TAG,"Setting up folder database");
 		FileLoggerDataSource file_ds = new FileLoggerDataSource(this,f.getName());
 		/* Adds the newly set up otfe folder to the FolderLog table */
-		this.folder_ds.createFolderLog(f,algorithm,Encryptor.generateVerifyHash(password,algorithm));
+		FolderLog folderlog = this.folder_ds.createFolderLog(f,algorithm,
+				Encryptor.generateVerifyHash(password,algorithm));
+		
 		/* Creates a new table that lists the files in the folder */
 		file_ds.open();
-		/* close data sources */
 		file_ds.close();
 		Log.d(TAG,"Folder Info added to database");
+		return (int) folderlog.getId();
 	}
 
 	/**
@@ -245,7 +247,7 @@ public class NewFolderActivity extends Activity{
 			switch (which){
 	        case DialogInterface.BUTTON_POSITIVE:
 	        	/* Start Folder Service Listener */ 
-	    		startService(otfe_intent);
+	        	FolderObserverIntentService.startObserving(getApplicationContext(), extras);
 	            break;
 	        case DialogInterface.BUTTON_NEGATIVE:
 	            break;

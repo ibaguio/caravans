@@ -2,14 +2,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >    
 	<PreferenceCategory android:title="@string/preferences_category_main">
 	    <EditTextPreference 
-	        android:title="@string/preferences_encrypt_folder_interval_title" 
-	        android:key="@string/preferences_key_encrypt_interval"
-	        android:summary="@string/preferences_encrypt_folder_interval_summary"
-	        android:defaultValue="3"
-	        android:numeric="integer"
-            android:maxLength="3"/>
-	    
-	    <EditTextPreference 
 	        android:title="@string/preferences_decrypted_folder_title" 
 	        android:key="@string/preferences_key_decrypted_folder"
 	        android:summary="@string/preferences_decrypted_folder_summary"

@@ -109,15 +109,15 @@ public final class R {
         public static final int afc_filechooser_activity_button_ok=0x7f0d0016;
         public static final int afc_filechooser_activity_footer_view_divider=0x7f0d0013;
         public static final int afc_filechooser_activity_header_view_divider=0x7f0d000d;
-        public static final int afc_filechooser_activity_menugroup_editor=0x7f0d0067;
-        public static final int afc_filechooser_activity_menugroup_navigator=0x7f0d0060;
-        public static final int afc_filechooser_activity_menugroup_sorter=0x7f0d0063;
-        public static final int afc_filechooser_activity_menugroup_view=0x7f0d0065;
-        public static final int afc_filechooser_activity_menuitem_home=0x7f0d0061;
-        public static final int afc_filechooser_activity_menuitem_new_folder=0x7f0d0068;
-        public static final int afc_filechooser_activity_menuitem_reload=0x7f0d0062;
-        public static final int afc_filechooser_activity_menuitem_sort=0x7f0d0064;
-        public static final int afc_filechooser_activity_menuitem_switch_viewmode=0x7f0d0066;
+        public static final int afc_filechooser_activity_menugroup_editor=0x7f0d0069;
+        public static final int afc_filechooser_activity_menugroup_navigator=0x7f0d0062;
+        public static final int afc_filechooser_activity_menugroup_sorter=0x7f0d0065;
+        public static final int afc_filechooser_activity_menugroup_view=0x7f0d0067;
+        public static final int afc_filechooser_activity_menuitem_home=0x7f0d0063;
+        public static final int afc_filechooser_activity_menuitem_new_folder=0x7f0d006a;
+        public static final int afc_filechooser_activity_menuitem_reload=0x7f0d0064;
+        public static final int afc_filechooser_activity_menuitem_sort=0x7f0d0066;
+        public static final int afc_filechooser_activity_menuitem_switch_viewmode=0x7f0d0068;
         public static final int afc_filechooser_activity_textview_full_dir_name=0x7f0d000e;
         public static final int afc_filechooser_activity_textview_saveas_filename=0x7f0d0015;
         public static final int afc_filechooser_activity_view_files_container=0x7f0d0011;
@@ -147,6 +147,8 @@ public final class R {
         public static final int browse_pattern=0x7f0d004f;
         public static final int btn_show_password=0x7f0d0046;
         public static final int btn_show_pattern=0x7f0d0047;
+        public static final int btn_start_all=0x7f0d005f;
+        public static final int btn_stop_all=0x7f0d0060;
         public static final int btn_switch_to_pass=0x7f0d0050;
         public static final int create_new_folder=0x7f0d0056;
         public static final int decrypt_btn=0x7f0d0002;
@@ -165,7 +167,7 @@ public final class R {
         public static final int input_password=0x7f0d005d;
         public static final int layout_=0x7f0d003d;
         public static final int layout_pass_patt=0x7f0d0031;
-        public static final int menu_settings=0x7f0d005f;
+        public static final int menu_settings=0x7f0d0061;
         public static final int nef_center=0x7f0d0044;
         public static final int nef_key_options=0x7f0d0045;
         public static final int nef_password=0x7f0d0048;
@@ -302,10 +304,10 @@ public final class R {
         public static final int afc_yesterday=0x7f060050;
         /**  ALGORITHMS 
          */
-        public static final int algorithm_aes=0x7f060070;
-        public static final int algorithm_auto=0x7f060073;
-        public static final int algorithm_serpent=0x7f060072;
-        public static final int algorithm_twofish=0x7f060071;
+        public static final int algorithm_aes=0x7f060073;
+        public static final int algorithm_auto=0x7f060076;
+        public static final int algorithm_serpent=0x7f060075;
+        public static final int algorithm_twofish=0x7f060074;
         public static final int alp_app_name=0x7f060000;
         public static final int alp_cmd_confirm=0x7f060001;
         public static final int alp_cmd_continue=0x7f060002;
@@ -325,66 +327,60 @@ public final class R {
         public static final int alp_msg_your_new_unlock_pattern=0x7f060010;
         public static final int alp_msg_your_unlock_pattern=0x7f060011;
         public static final int app_name=0x7f060051;
-        /**  COLORS 
-         */
-        public static final int color_green=0x7f060086;
-        public static final int color_grey=0x7f060088;
-        public static final int color_orange=0x7f060087;
-        public static final int color_white=0x7f060089;
-        public static final int decrypt_file=0x7f06005e;
-        public static final int dest_folder=0x7f060068;
-        public static final int encrypt_file=0x7f06005d;
-        public static final int file_to_decrypt=0x7f060067;
-        public static final int folder_location=0x7f060062;
-        public static final int folders_desc=0x7f06006b;
+        public static final int decrypt_file=0x7f060060;
+        public static final int dest_folder=0x7f060069;
+        public static final int encrypt_file=0x7f06005f;
+        public static final int file_to_decrypt=0x7f060068;
+        public static final int folder_location=0x7f060063;
+        public static final int folders_desc=0x7f06006c;
         /** OTHERS 
          */
-        public static final int fsize_to_test=0x7f060056;
-        public static final int help_desc=0x7f06006a;
+        public static final int fsize_to_test=0x7f060058;
+        public static final int help_desc=0x7f06006b;
         public static final int menu_settings=0x7f060052;
-        public static final int newEncFolder=0x7f06005c;
-        public static final int new_folder_btn=0x7f060066;
-        public static final int number_of_tests=0x7f060057;
-        public static final int performance_test=0x7f060060;
-        public static final int preferences_category_debugging=0x7f060075;
+        public static final int newEncFolder=0x7f06005e;
+        public static final int new_folder_btn=0x7f060067;
+        public static final int number_of_tests=0x7f060059;
+        public static final int preferences_category_debugging=0x7f060078;
         /**  PREFERENCES 
          */
-        public static final int preferences_category_main=0x7f060074;
+        public static final int preferences_category_main=0x7f060077;
         public static final int preferences_debugging_mode_summary=0x7f060081;
         public static final int preferences_debugging_mode_title=0x7f060080;
         public static final int preferences_decrypted_folder_summary=0x7f06007b;
         public static final int preferences_decrypted_folder_title=0x7f06007a;
         public static final int preferences_default_decrypted_folder=0x7f060085;
-        public static final int preferences_encrypt_folder_interval_summary=0x7f060078;
-        public static final int preferences_encrypt_folder_interval_title=0x7f060077;
         public static final int preferences_key_debugging_mode=0x7f06007f;
         public static final int preferences_key_decrypted_folder=0x7f060079;
-        public static final int preferences_key_encrypt_interval=0x7f060076;
         public static final int preferences_key_power_saving=0x7f06007c;
         public static final int preferences_key_sdcard_logging=0x7f060082;
         public static final int preferences_power_saving_summary=0x7f06007e;
         public static final int preferences_power_saving_title=0x7f06007d;
         public static final int preferences_sdcard_logging_summary=0x7f060084;
         public static final int preferences_sdcard_logging_title=0x7f060083;
-        public static final int retype_password=0x7f060064;
-        public static final int run_performance_test=0x7f060061;
-        public static final int search=0x7f06006c;
-        public static final int settings=0x7f06005f;
-        public static final int single_decrypt=0x7f060069;
-        public static final int switch_to_pass=0x7f06005b;
-        public static final int text_algorithm=0x7f060065;
-        public static final int text_listening=0x7f06006d;
-        public static final int text_off=0x7f06006f;
-        public static final int text_on=0x7f06006e;
-        public static final int text_password=0x7f060063;
-        public static final int text_pattern=0x7f060058;
-        public static final int text_pattern_selected=0x7f06005a;
-        public static final int text_select_security_input=0x7f060059;
+        public static final int retype_password=0x7f060065;
+        public static final int run_performance_test=0x7f060062;
+        public static final int search=0x7f06006d;
+        public static final int settings=0x7f060061;
+        public static final int single_decrypt=0x7f06006a;
+        public static final int switch_to_pass=0x7f06005d;
+        public static final int text_algorithm=0x7f060066;
+        public static final int text_listening=0x7f06006e;
+        public static final int text_off=0x7f060070;
+        public static final int text_on=0x7f06006f;
+        public static final int text_password=0x7f060064;
+        public static final int text_pattern=0x7f06005a;
+        public static final int text_pattern_selected=0x7f06005c;
+        public static final int text_select_security_input=0x7f06005b;
+        public static final int text_start_all=0x7f060071;
+        public static final int text_stop_all=0x7f060072;
         /**  ACTIVITY TITLES 
          */
         public static final int title_decrypt_single=0x7f060053;
         public static final int title_new_folder=0x7f060054;
+        public static final int title_performance_test=0x7f060056;
         public static final int title_settings=0x7f060055;
+        public static final int title_view_folders=0x7f060057;
     }
     public static final class style {
         public static final int AppTheme=0x7f0a0003;

@@ -62,10 +62,10 @@ public class FolderLoggerDataSource {
 			Log.d(TAG,"query completed");
 			cursor.moveToFirst();
 			Log.d(TAG,"moved to first");
-			FolderLog newFileLog = cursorToFolderLog(cursor);
-			Log.d(TAG,"created new file log");
+			FolderLog newFolderLog = cursorToFolderLog(cursor);
+			Log.d(TAG,"created new folder log");
 			cursor.close();
-			return newFileLog;
+			return newFolderLog;
 		}catch(SQLiteConstraintException err){
 			Log.d(TAG, "Folder already in list");
 		}

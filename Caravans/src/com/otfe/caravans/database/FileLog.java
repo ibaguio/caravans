@@ -49,9 +49,9 @@ public class FileLog {
 	@Override
 	public String toString(){
 		return "Filename: "+this.filename+
-				"Checksum: " +this.checksum+
-				"Filesize: " +this.filesize+
-				"LastMod: " +this.lastmodified+
-				"Filetype: "+this.filetype;
+				"\nChecksum: " +this.checksum+
+				"\nFilesize: " +this.filesize+
+				"\nLastMod: " +this.lastmodified+
+				"\nFiletype: "+this.filetype;
 	}
 }
