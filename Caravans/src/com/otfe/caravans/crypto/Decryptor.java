@@ -29,7 +29,7 @@ import com.otfe.caravans.Constants;
  * 
  * @author Ivan Dominic Baguio
  * @see com.otfe.caravans.crypto.Encryptor
- * @see com.otfe.caravans.crypto.Utility
+ * @see com.otfe.caravans.crypto.CryptoUtility
  * @since 1.0
  */
 
@@ -70,13 +70,13 @@ public class Decryptor{
     public Decryptor(String password, String src_path, String destFolder, String algo){
         try{
             toDecrypt = new File(src_path);
-            secretKey = Utility.getKey(password.toCharArray());
+            secretKey = CryptoUtility.getKey(password.toCharArray());
             algorithm = algo;
             dest_folder = new File(destFolder);
             
             //Get the first 16 bytes as IV
             FileInputStream fis = new FileInputStream(toDecrypt);
-            iv = Utility.read(fis,16,0);
+            iv = CryptoUtility.read(fis,16,0);
             fis.close();
             if (!toDecrypt.isFile()){
                 ready = false;
@@ -119,7 +119,7 @@ public class Decryptor{
             Log.d(TAG,"Check: "+ready);
             if (ready){
                 setExtension();
-                String d = dest_folder+ File.separator + Utility.getRawFileName(toDecrypt) + extension;
+                String d = dest_folder+ File.separator + CryptoUtility.getRawFileName(toDecrypt) + extension;
                 Log.d(TAG,"FINAL DEST: *"+d+"*");
                 dest_file = new File(d);
                 if (!dest_file.exists())
@@ -240,8 +240,8 @@ public class Decryptor{
      */
     public boolean verifyChecksum(String checksum){
     	try{
-    		byte[] bsum = Utility.md5Sum(dest_file);
-    		return checksum.equals(Utility.byteToString(bsum));
+    		byte[] bsum = CryptoUtility.md5Sum(dest_file);
+    		return checksum.equals(CryptoUtility.byteToString(bsum));
     	}catch(Exception e){
     		e.printStackTrace();
     		return false;
@@ -272,7 +272,7 @@ public class Decryptor{
 
             //create and initialize the cipher to be used on decrypting
             Cipher cipher = Cipher.getInstance(algorithm+"/CBC/PKCS5Padding",Constants.PROVIDER);
-            SecretKey secretK = Utility.getKey(password.toCharArray());
+            SecretKey secretK = CryptoUtility.getKey(password.toCharArray());
             cipher.init(Cipher.DECRYPT_MODE, secretK, new IvParameterSpec(iv));
             CipherOutputStream cos = new CipherOutputStream(baos,cipher);
             

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_background"
+    android:paddingLeft="15dp"
+    android:paddingRight="8dp">
+    
+    <TextView
+        android:id="@+id/folder_id"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+    
+    <LinearLayout 
+        android:id="@+id/ll1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1.0"
+        android:layout_marginTop="10dp">
+    
+		<TextView
+		    android:id="@+id/tv1"
+		    android:layout_width="0dp"
+		    android:layout_weight=".3"
+		    android:layout_height="wrap_content"
+		    android:textColor="#aaaaaa"
+		    android:text="@string/text_folder"
+		    android:textSize="16dp"/>
+		
+		<TextView
+		    android:id="@+id/folder_name"
+		    android:layout_width="0dp"
+		    android:layout_weight=".7"
+		    android:layout_height="wrap_content"
+		    android:textColor="#ffffff"
+		    android:textSize="16dp"/>
+	
+	</LinearLayout>
+	
+    <LinearLayout 
+        android:id="@+id/ll2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1.0"
+        android:layout_below="@id/ll1"
+        android:layout_marginTop="6dp">
+		
+		<TextView
+		    android:id="@+id/tv2"
+		    android:layout_width="0dp"
+		    android:layout_height="wrap_content"
+		    android:layout_weight=".3"
+		    android:text="@string/text_path"
+		    android:textColor="#aaaaaa"
+		    android:textSize="16dp"/>
+		
+		<TextView
+		    android:id="@+id/folder_path"
+		    android:layout_width="0dp"
+		    android:layout_weight=".7"
+		    android:layout_height="wrap_content"
+		    android:textColor="#ffffff"
+		    android:textSize="16dp"/>
+	</LinearLayout>
+	
+    <LinearLayout 
+        android:id="@+id/ll3"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1.0"
+        android:layout_below="@id/ll2"
+        android:layout_marginTop="6dp">
+		
+		<TextView
+		    android:id="@+id/tv3"
+		    android:layout_width="0dp"
+		    android:layout_height="wrap_content"
+		    android:layout_weight=".3"
+		    android:text="@string/text_algorithm"
+		    android:textColor="#aaaaaa"
+		    android:textSize="16dp"/>
+		
+		<TextView
+		    android:id="@+id/folder_algorithm"
+		    android:layout_width="0dp"
+		    android:layout_weight=".7"
+		    android:layout_height="wrap_content"
+		    android:textColor="#ffffff"
+		    android:textSize="16dp"/>
+	</LinearLayout>
+    
+    <Button
+        android:id="@+id/observe_toggle"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll3"
+        android:layout_marginTop="6dp"
+        android:layout_alignParentRight="true"
+        android:onClick="onClick"
+        android:textSize="14.5dp"
+        android:textStyle="bold"
+        android:textColor="#afafaf"/>
+</RelativeLayout>

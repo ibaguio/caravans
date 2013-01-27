@@ -7,11 +7,13 @@ package com.otfe.caravans.database;
  * @author Ivan Dominic Baguio
  */
 public class FolderLog {
+	private boolean isPattern;
 	private long id;
 	private String foldername;
 	private String algorithm;
 	private byte[] hash;
 	private String path;
+	
 	public long getId(){
 		return this.id;
 	}
@@ -38,10 +40,15 @@ public class FolderLog {
 	}	
 	public void setVerifyHash(byte[] hash){
 		this.hash = hash;
-	}
-	
+	}	
 	public byte[] getVerifyHash(){
 		return hash;
+	}
+	public void setIsPattern(boolean isPattern){
+		this.isPattern = isPattern;
+	}
+	public boolean isPattern(){
+		return isPattern;
 	}
 	
 	@Override

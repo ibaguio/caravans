@@ -7,9 +7,8 @@ import java.util.List;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
 /**
@@ -28,30 +27,33 @@ public class FolderLoggerDataSource {
 		dbHelper = new FolderLogHelper(context);
 	}
 	
-	public void open() throws SQLException{
-		Log.d(TAG,"Opening");
+	public void open(){
 		database = dbHelper.getWritableDatabase();
-		Log.d(TAG,"Opened");
+		Log.d(TAG,"Opened "+database.getPath());
 	}
 	
 	public void close(){
-		Log.d(TAG,"Close");
+		Log.d(TAG,"Closing "+database.getPath());
 		dbHelper.close();
+		//database.close();
 	}
 	
 	/**
 	 * adds a new otfe folder to the database 
 	 * @param f
 	 * @param algorithm
-	 * @return
+	 * @return a FolderLog representation of newly added folder
 	 */
-	public FolderLog createFolderLog(File f, String algorithm, byte[] hash){
+	public FolderLog createFolderLog(File f, String algorithm, byte[] hash, 
+			boolean isPattern){
 		ContentValues values = new ContentValues();
 		values.put(FolderLogHelper.COLUMN_FOLDERNAME, f.getName());
 		values.put(FolderLogHelper.COLUMN_PATH, f.getAbsolutePath());
 		values.put(FolderLogHelper.COLUMN_HASH, hash);
 		values.put(FolderLogHelper.COLUMN_ALGORITHM, algorithm);
+		values.put(FolderLogHelper.COLUMN_AUTH_TYPE, isPattern? 1:0);
 		
+		Log.d(TAG, "NEW. isPattern: "+(isPattern?1:0));
 		try{
 			/* inserts the information to the database, throws exception
 			   when folder is already in database */
@@ -66,14 +68,14 @@ public class FolderLoggerDataSource {
 			Log.d(TAG,"created new folder log");
 			cursor.close();
 			return newFolderLog;
-		}catch(SQLiteConstraintException err){
+		}catch(SQLiteException e){
 			Log.d(TAG, "Folder already in list");
 		}
 		return null;
 	}
 	
-	public void deleteFolderLog(FolderLog fileLog){
-		long id = fileLog.getId();
+	public void deleteFolderLog(FolderLog folderLog){
+		long id = folderLog.getId();
 		System.out.println("FolderLog delete with id: "+id);
 		database.delete(FolderLogHelper.TABLE_NAME, FolderLogHelper.COLUMN_ID + " = " +id,null);
 	}
@@ -83,20 +85,34 @@ public class FolderLoggerDataSource {
 	 * @return
 	 */
 	public List<FolderLog> getAllFolderLogs(){
-		Log.d(TAG,"Getting all folderLog");
-		List<FolderLog> folderLogs = new ArrayList<FolderLog>();
-		Cursor cursor = database.query(FolderLogHelper.TABLE_NAME,allColumns,null,null,null,null,null);
-		Log.d(TAG,"Folderlog count: "+cursor.getCount());
-		cursor.moveToFirst();
-		while(!cursor.isAfterLast()){
-			FolderLog folderLog = cursorToFolderLog(cursor);
-			folderLogs.add(folderLog);
-			cursor.moveToNext();
-		}
-		Log.d(TAG,"returning folderLogs, count: "+folderLogs.size());
-		return folderLogs;
+		try{
+			Log.d(TAG,"Getting all folderLog");
+			List<FolderLog> folderLogs = new ArrayList<FolderLog>();
+			Cursor cursor = database.query(FolderLogHelper.TABLE_NAME,allColumns,null,null,null,null,null);
+			Log.d(TAG,"Folderlog count: "+cursor.getCount());
+			cursor.moveToFirst();
+			while(!cursor.isAfterLast()){
+				FolderLog folderLog = cursorToFolderLog(cursor);
+				folderLogs.add(folderLog);
+				cursor.moveToNext();
+			}
+			Log.d(TAG,"returning folderLogs, count: "+folderLogs.size());
+			return folderLogs;
+		}catch(SQLiteException e){}
+		return null;
 	}
 
+	public FolderLog getFolderLog(int row_id){
+		try{
+			String query = "SELECT * FROM "+FolderLogHelper.TABLE_NAME+" WHERE "+FolderLogHelper.COLUMN_ID+" =?";
+			Cursor c = database.rawQuery(query, new String[]{""+row_id});
+			c.moveToFirst();
+			if ( c.getCount() == 1)
+				return cursorToFolderLog(c);
+		}catch(SQLiteException e){}
+		return null;
+	}
+	
 	/**
 	 * Converts a cursor(db row) to a FolderLog
 	 * @param cursor
@@ -110,8 +126,9 @@ public class FolderLoggerDataSource {
 		folderLog.setPath(cursor.getString(2));
 		folderLog.setAlgorithm(cursor.getString(3));
 		folderLog.setVerifyHash(cursor.getBlob(4));
+		folderLog.setIsPattern(cursor.getInt(5)==1);
 		Log.d(TAG,"ID: "+cursor.getLong(0)+"\nFolderName: "+cursor.getString(1)+"\nPath: "+cursor.getString(2)
-				+"\nAlgo: "+cursor.getString(3));
+				+"\nAlgo: "+cursor.getString(3)+"\nPattern?: "+folderLog.isPattern());
 		return folderLog;
 	}
 
@@ -122,9 +139,12 @@ public class FolderLoggerDataSource {
 	 * @return
 	 */
 	public boolean isNewFolder(String path){
-		String sql = "SELECT "+FolderLogHelper.COLUMN_ID+" FROM "+FolderLogHelper.TABLE_NAME+
-				" WHERE "+FolderLogHelper.COLUMN_PATH+"=?";
-		Cursor c = database.rawQuery(sql, new String[] {path});
-		return c.getCount() == 0;
+		try{
+			String sql = "SELECT "+FolderLogHelper.COLUMN_ID+" FROM "+FolderLogHelper.TABLE_NAME+
+					" WHERE "+FolderLogHelper.COLUMN_PATH+"=?";
+			Cursor c = database.rawQuery(sql, new String[] {path});
+			return c.getCount() == 0;
+		}catch(SQLiteException e){}
+		return true;
 	}
 }

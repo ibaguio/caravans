@@ -13,7 +13,7 @@
     	<TextView
 	        android:layout_width="95dp"
 	        android:layout_height="wrap_content"
-	        android:text="@string/fsize_to_test"
+	        android:text="@string/text_file_size"
 	        android:textColor="#dddddd"
 	        android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -34,7 +34,7 @@
     	    android:layout_height="42dp"
     	    android:textColor="#dddddd"
 	        android:layout_marginLeft="10dp"
-    	    android:prompt="@string/fsize_to_test"
+    	    android:prompt="@string/text_file_size"
     	    android:entries="@array/file_sizes"/>
 	</LinearLayout>
 
@@ -46,7 +46,7 @@
     	<TextView
 	        android:layout_width="95dp"
 	        android:layout_height="wrap_content"
-	        android:text="@string/number_of_tests"
+	        android:text="@string/text_test_count"
 	        android:textColor="#dddddd"
 	        android:textAppearance="?android:attr/textAppearanceMedium" />
     	
@@ -67,7 +67,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_marginTop="5dp"
 	        android:textColor="#dddddd"
-	        android:text="@string/dest_folder"
+	        android:text="@string/text_dest_folder"
 	        android:textAppearance="?android:attr/textAppearanceMedium" />
     
     <LinearLayout
@@ -89,7 +89,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_marginLeft="10dp"
-	        android:contentDescription="@string/search"
+	        android:contentDescription="@string/text_search"
 	        android:onClick="browseFolder"
 	        android:src="@drawable/search" />
     </LinearLayout>
@@ -99,6 +99,6 @@
 		android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_marginTop="10dp" 
-	    android:text="@string/run_performance_test"
+	    android:text="@string/text_run_performance_test"
 	    android:onClick="runPerfTest"/>	
 </LinearLayout>

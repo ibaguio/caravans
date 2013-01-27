@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:orientation="horizontal">
+        
+    <Button
+    	android:id="@+id/password_btn"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/text_password"
+        android:onClick="onClick"/>
+        
+	<Button
+    	android:id="@+id/pattern_btn"
+        android:layout_width="0dp"
+       	android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/text_pattern"
+        android:onClick="onClick"/>
+	
+	<Button 
+	    android:id="@+id/default_btn"
+        android:layout_width="0dp"
+       	android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+</LinearLayout>

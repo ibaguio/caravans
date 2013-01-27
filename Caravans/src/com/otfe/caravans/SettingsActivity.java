@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 
 import com.otfe.caravans.performance_test.PerformanceTestActivity;
@@ -17,7 +18,7 @@ public class SettingsActivity extends PreferenceActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+ /*       
         preferences = getSharedPreferences(Constants.SETTINGS_NAME,
 				Constants.SETTINGS_MODE);
         
@@ -28,7 +29,7 @@ public class SettingsActivity extends PreferenceActivity {
 
 		PreferenceManager.setDefaultValues(SettingsActivity.this,
 				R.xml.preferences, false);
-
+*/
         addPreferencesFromResource(R.xml.preferences);
         setContentView(R.layout.settings);
         setTheme(R.style.LightText);
@@ -39,6 +40,10 @@ public class SettingsActivity extends PreferenceActivity {
 			case R.id.perf_test_button:
 				Intent intent = new Intent(this, PerformanceTestActivity.class);
 				startActivity(intent);
+				break;
+			case R.id.btn_reset:
+				Log.d(TAG, "Deleting database");
+				this.deleteDatabase(Constants.DATABASE_NAME);
 				break;
 		}
 	}

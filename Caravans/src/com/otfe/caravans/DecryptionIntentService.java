@@ -1,8 +1,6 @@
 package com.otfe.caravans;
 
 import com.otfe.caravans.crypto.Decryptor;
-import com.otfe.caravans.performance_test.PerformanceTester;
-
 import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;

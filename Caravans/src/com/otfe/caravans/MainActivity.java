@@ -36,9 +36,9 @@ public class MainActivity extends Activity {
 	        case R.id.decrypt_btn:
 	        	decryptSingle();
     			break;
-	        case R.id.help_btn:
+	        /*case R.id.help_btn:
 	        	showHelp();
-    			break;
+    			break;*/
 	        case R.id.settings_btn:
 	        	showSettings();
 	        	break;
@@ -56,6 +56,8 @@ public class MainActivity extends Activity {
     
     private void encryptSingle(){
     	Log.d(TAG,"Encrypting Single file");
+    	Intent intent = new Intent(this, EncryptSingleActivity.class);
+    	startActivity(intent);
     }
     private void decryptSingle(){
     	Log.d(TAG,"Decrypting Single file");

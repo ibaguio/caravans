@@ -3,6 +3,7 @@ package com.otfe.caravans.database;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -15,13 +16,12 @@ import com.otfe.caravans.Constants;
  * @author baguio
  */
 public class FileLogHelper extends SQLiteOpenHelper{
-	
+	private static final String TAG = "File LH";
 	public static final String COLUMN_ID = "_id";
 	public static String TARGET_NAME = "";
 	private String TABLE_NAME;
 	public String TABLE_CREATE;
 	public static final String BASE_NAME = "filelogger_";
-	public static final String DATABASE_NAME = "otfelogger.db";
 	public static final String COLUMN_FILENAME = "filename";
 	public static final String COLUMN_CHECKSUM = "checksum";
 	public static final String COLUMN_FILESIZE = "filesize";
@@ -36,7 +36,7 @@ public class FileLogHelper extends SQLiteOpenHelper{
 					COLUMN_FILETYPE + " TEXT)";
 	
 	public FileLogHelper(Context context, String foldername){
-		super(context, DATABASE_NAME, null, Constants.DATABASE_VERSION);
+		super(context, Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION);
 		Log.d("File LH","TARGET: "+foldername);
 		TARGET_NAME = foldername.toLowerCase();
 		TABLE_NAME = BASE_NAME + TARGET_NAME;
@@ -44,16 +44,18 @@ public class FileLogHelper extends SQLiteOpenHelper{
 		
 		SQLiteDatabase db;
 		try {
-			Log.d("","Opening/creating database: "+DATABASE_NAME);
-            db = context.openOrCreateDatabase(DATABASE_NAME, Constants.DATABASE_VERSION, null);
+			Log.d("","Opening/creating database: "+Constants.DATABASE_NAME);
+            db = context.openOrCreateDatabase(Constants.DATABASE_NAME, Constants.DATABASE_VERSION, null);
             Cursor c = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
             if (!tableExist(c)){
             	Log.d("File LH",TABLE_NAME+ " does not yet exist, creating it");
             	this.onCreate(db);
             }else
             	Log.d("File LH",TABLE_NAME+" exits. will continue");
-        } catch (Exception e) {
-        	e.printStackTrace();
+            db.close();
+        } catch (SQLiteException e) {
+        	//e.printStackTrace();
+        	Log.e(TAG,e.getMessage());
         }
 	}
 	

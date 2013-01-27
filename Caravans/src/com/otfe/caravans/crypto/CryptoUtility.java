@@ -2,6 +2,8 @@ package com.otfe.caravans.crypto;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -29,7 +31,7 @@ import com.otfe.caravans.Constants;
  * @author Ivan Dominic Baguio
  *
  */
-public class Utility{
+public class CryptoUtility{
     private static final String TAG = "Utility";
 
     /**
@@ -51,14 +53,27 @@ public class Utility{
         return ext;
     }
 
-    /* returns the filename without the extension
-     * ex. Filename = "test.txt" would return test */
+    /**
+     * Returns the filename without the extension
+     * ex. Filename = "test.txt" would return test 
+     * @param f file whose raw name to be returned 
+     * @return raw file name of file without extension
+     */
     public static String getRawFileName(File f){
-        String filename = f.getName();
-        int i = filename.lastIndexOf('.');
+        return getRawFileName(f.getName());
+    }
+
+    /**
+     * Returns the filename without the extension
+     * ex. Filename = "test.txt" would return test 
+     * @param fName filename of the file 
+     * @return  raw file name of fName without extension
+     */
+    public static String getRawFileName(String fName){
+    	int i = fName.lastIndexOf('.');
         if (i<0)
-            return filename;
-        return filename.substring(0,i);
+            return fName;
+        return fName.substring(0,i);
     }
 
     /**
@@ -144,7 +159,7 @@ public class Utility{
    }
 
    /**
-    * 
+    * Appends the extension to the fileName
     * @param target
     * @param parent
     * @param extension
@@ -157,14 +172,17 @@ public class Utility{
    }
    
    /**
-    * calculates the md5 hash of a given file
-    * src: http://stackoverflow.com/questions/304268/getting-a-files-md5-checksum-in-java 
+    * Calculates the md5 hash of a given file
+    * <p>src: http://stackoverflow.com/questions/304268/getting-a-files-md5-checksum-in-java 
     * @param f - file whose md5 hash to be calculated
     * @return byte array of md5 hash, can be converted to human readable
-    * string by using Utility.byteToString function 
-    * @throws Exception
+    * string by using Utility.byteToString function
+    * @throws FileNotFoundException
+    * @throws IOException
+    * @throws NoSuchAlgorithmException
     */
-   public static byte[] md5Sum(File f) throws Exception {
+   public static byte[] md5Sum(File f) throws FileNotFoundException,
+   		IOException, NoSuchAlgorithmException{
       InputStream fis =  new FileInputStream(f);
 
       byte[] buffer = new byte[1024];
@@ -181,7 +199,7 @@ public class Utility{
    
    /**
     * removes /mnt from path
-    * @param path
+    * @param path String path of the file
     * @return file path without '/mnt' on it
     */
    public static String pathRemoveMNT(String path){

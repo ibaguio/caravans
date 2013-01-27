@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="top"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:background="@drawable/main_background">
+    
+    <TextView
+        android:id="@+id/tv1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/text_file_to_encrypt"
+        android:textColor="#dddddd"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+	<TextView
+        android:id="@+id/file_to_encrypt"
+        android:layout_width="230dp"
+        android:layout_height="30dp"
+        android:layout_alignLeft="@id/tv1"
+        android:layout_below="@id/tv1"
+        android:layout_marginTop="7dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="5dp"
+        android:paddingTop="3dp"
+        android:background="@drawable/input_style"/>
+   
+	<ImageButton
+        android:id="@+id/browse_target_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="44dp"
+        android:layout_toRightOf="@id/file_to_encrypt"
+        android:contentDescription="@string/text_search"
+        android:onClick="onClick"
+        android:src="@drawable/search" />
+	
+	<TextView
+        android:id="@+id/tv2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv1"
+        android:layout_below="@id/file_to_encrypt"
+        android:layout_marginTop="18dp"
+        android:text="@string/text_dest_folder"
+        android:textColor="#dddddd"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+	<TextView
+        android:id="@+id/destination_folder"
+        android:layout_width="230dp"
+        android:layout_height="30dp"
+        android:layout_alignLeft="@id/tv1"
+        android:layout_below="@id/tv2"
+        android:layout_marginTop="7dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="5dp"
+        android:paddingTop="3dp"
+        android:background="@drawable/input_style"/>
+	    
+	<ImageButton
+        android:id="@+id/browse_for_dest_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="125dp"
+        android:layout_toRightOf="@id/destination_folder"
+        android:contentDescription="@string/text_search"
+        android:onClick="onClick"
+        android:src="@drawable/search" />
+	
+	<TextView
+        android:id="@+id/tv3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tv1"
+        android:layout_marginTop="18dp"
+        android:text="@string/text_select_security_input"
+        android:layout_below="@id/destination_folder"
+        android:textColor="#dddddd"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <include android:id="@+id/security_input"
+        layout="@layout/security_input"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tv1"
+        android:layout_below="@id/tv3"
+        android:layout_marginTop="7dp"
+        android:layout_marginRight="6dp"/>
+    
+    <TextView
+        android:id="@+id/tv4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tv1"
+        android:layout_below="@id/security_input"
+        android:layout_marginTop="7dp"
+        android:text="@string/text_algorithm"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#dddddd" />
+    
+	<include
+	    android:id="@+id/radioGroup_algorithms" 
+	    layout="@layout/span_algorithm"
+		android:layout_alignLeft="@id/tv1"
+        android:layout_below="@id/tv4"
+        android:layout_marginTop="7dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"/>
+    
+	<CheckBox 
+    	android:id="@+id/chk_delete"
+        android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tv1"
+        android:layout_below="@id/radioGroup_algorithms"
+        android:layout_marginTop="7dp"
+        android:text="@string/text_delete_original_file"
+        android:textColor="#dddddd" />
+	
+    <Button
+        android:id="@+id/single_encrypt_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tv1"
+        android:layout_marginBottom="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:onClick="onClick"
+        android:text="@string/text_encrypt_file" />
+</RelativeLayout>

@@ -16,10 +16,14 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.otfe.caravans.Utility.Callback;
+import com.otfe.caravans.Utility.PasskeyReturn;
+import com.otfe.caravans.crypto.CryptoUtility;
 import com.otfe.caravans.crypto.Encryptor;
 import com.otfe.caravans.database.FileLoggerDataSource;
 import com.otfe.caravans.database.FolderLog;
@@ -35,38 +39,39 @@ import com.otfe.caravans.database.FolderLoggerDataSource;
 public class NewFolderActivity extends Activity{
 	private final int GET_FOLDERPATH = 0;
 	private final int MAKE_PATTERN = 1;
-	private final String TAG = "New Folder Activity";
-	private String pattern="";
-	private FolderLoggerDataSource folder_ds;
-	private Intent otfe_intent;
-	private Bundle extras;
+	private final String TAG = "NewFolderActivity";
 	
+	private File target;
+	private String passkey;
+	private String algorithm;
+	private int _id;
+	private FolderLoggerDataSource folder_ds;
+	private boolean isPattern;
+	
+	private Callback newEncFolder;
+	private PasskeyReturn pwOKCallback;
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.new_encrypted_folder);
 		folder_ds = new FolderLoggerDataSource(this);
-	}
-	
-	/**
-	 * Call intent to show browse folder
-	 * @param view
-	 */
-	public void browseFolder(View view){
-    	Intent intent = new Intent(this,FileChooserActivity.class);
-    	intent.putExtra(FileChooserActivity._Rootpath, (Parcelable) new LocalFile(Constants.SDCARD));
-    	intent.putExtra(FileChooserActivity._FilterMode, IFileProvider.FilterMode.DirectoriesOnly);
-    	startActivityForResult(intent, GET_FOLDERPATH);
-	}
-	
-	/**
-	 * Call intent to show pattern maker
-	 * @param view
-	 */
-	public void showPattern(View view){
-		Intent intent = new Intent(this,LockPatternActivity.class);
-		intent.putExtra(LockPatternActivity._Mode, LockPatternActivity.LPMode.CreatePattern);
-		startActivityForResult(intent, MAKE_PATTERN);
+		((TextView) findViewById(R.id.folder_to_encrypt))
+			.setText(CryptoUtility.pathRemoveMNT(
+				Constants.SETTINGS_DEFAULT_TARGET_FOLDER_PATH));
+		target = new File(Constants.SETTINGS_DEFAULT_TARGET_FOLDER_PATH);
+		newEncFolder = new Callback() {
+			public void doIt() {
+				setupNewEncryptedFolder();
+			}
+		};
+		pwOKCallback = new PasskeyReturn() {
+			public void setPasskey(String passkey) {
+				NewFolderActivity.this.passkey = passkey;
+				isPattern = false;
+				Utility.selectedInput(NewFolderActivity.this,
+					R.id.password_btn);
+			}
+		};
 	}
 
 	@Override
@@ -74,96 +79,69 @@ public class NewFolderActivity extends Activity{
 	    switch (requestCode) {
 		    case GET_FOLDERPATH:
 		        if (resultCode == RESULT_OK) {
-		            List<LocalFile> files = (List<LocalFile>) 
+		            @SuppressWarnings("unchecked")
+					List<LocalFile> files = (List<LocalFile>) 
 		            		data.getSerializableExtra(FileChooserActivity._Results);
 		            for (File f : files){
-		            	TextView tv_folder = (TextView) findViewById(R.id.text_folder_address);
-		        		tv_folder.setText(f.getPath());
+		            	target = f;
+		            	TextView tv_folder = (TextView) findViewById(R.id.folder_to_encrypt);
+		        		tv_folder.setText(CryptoUtility.pathRemoveMNT(f.getPath()));
 		            }
 		        }
 		        break;
-		    case MAKE_PATTERN:
-		    	TextView tv = (TextView)this.findViewById(R.id.tv_pattern);
+		    case Constants.TASK_MAKE_PATTERN:
 		    	if (resultCode == RESULT_OK) {
-		    		pattern = data.getStringExtra(LockPatternActivity._Pattern);
-		    		Log.d(TAG, "Pattern: "+pattern);
-		    		tv.setText("Pattern is SET!");
-		    	}else if (resultCode == RESULT_CANCELED && pattern=="")
-		    		tv.setText("Pattern is NOT SET!");
+		    		passkey = data.getStringExtra(LockPatternActivity._Pattern);
+		    		isPattern = true;
+		    		Log.d(TAG, "Pattern: "+passkey);
+		    		Utility.selectedInput(this, R.id.pattern_btn);
+		    	}
 		    	break;
 	    }
 	}
 	
-	/**
-	 * method to be called when button
-	 * create new folder is clicked
-	 * @param view
-	 */
-	public void createNewFolder(View view){
-		TextView tv_dir = ((TextView) findViewById(R.id.text_folder_address));
-		String dir_name = tv_dir.getText().toString();
-		
-		File dir = new File(dir_name);
-		/* check if directory is valid*/
-		if (!dir.isDirectory() || !dir.canWrite()){
-			Toast.makeText(this, "Not a valid folder", Toast.LENGTH_SHORT).show();
-			Log.d(TAG,"Not a valid folder");
+	public void onClick(View view){
+		switch(view.getId()){
+			case R.id.browse_btn:
+				Utility.browseFile(this, Constants.BROWSE_FILE);
+				break;
+			case R.id.password_btn:
+				Utility.showGetPasswordDialog(this, pwOKCallback);
+				break;
+			case R.id.pattern_btn:
+				Utility.showCreateLockPattern(this);
+				break;
+			case R.id.create_new_folder:
+				setupNewEncryptedFolder();
+				break;
+		}
+	}
+	
+	private void setupNewEncryptedFolder(){
+		if (!this.folder_ds.isNewFolder(target.getPath())){
+			Toast.makeText(this, "The selected folder is already target for on the fly encryption", 
+					Toast.LENGTH_LONG).show();
+			target = null;
+			((TextView)findViewById(R.id.folder_to_encrypt)).setText("");
+			return;
+		}else if (!target.exists()){
+			Utility.promptCreateFolderDialog(this, target, newEncFolder);
+			return;
+		}else if (passkey == null || passkey.isEmpty()){
+			Toast.makeText(this, "Enter a password or pattern", Toast.LENGTH_SHORT).show();
 			return;
 		}
 		
-		/* final password to use */
-		String fPass = getFinalPassword();
-		Log.d(TAG, "PASSWORD: *"+fPass+"*");
-		
-		/* check if folder is already in database */
-		if (!this.folder_ds.isNewFolder(dir_name)){
-			Toast.makeText(this, "The selected folder is already target for on the fly encryption", Toast.LENGTH_LONG).show();
-			tv_dir.setText("");
-			return;
-		}
-		/* password/pattern verification */
-		else if (fPass==null){
-			Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
-			/* clear the input fields */
-			TextView tv = (TextView) findViewById(R.id.edit_password);
-			tv.setText("");
-			tv = (TextView) findViewById(R.id.edit_password2);
-			tv.setText("");
-			pattern=""; //reset pattern
-			return;
-		}else if (fPass.isEmpty()){
-			Toast.makeText(this, "Please select a password or pattern", Toast.LENGTH_SHORT).show();
-			return;
-		}
 		/* get the selected Radio Button Id */
-		RadioGroup rg = (RadioGroup)this.findViewById(R.id.radioGroup_algo_nef);
-		int algo = rg.getCheckedRadioButtonId();
-		
-		/* set the final algorithm to be used for enc/dec */
-		String algorithm = "";
-		if (algo == R.id.radio_aes_nef)
-			algorithm = Constants.AES;
-		else if (algo ==R.id.radio_two_fish_nef)
-			algorithm = Constants.TWO_FISH;
-		else if (algo == R.id.radio_serpent_nef)
-			algorithm = Constants.SERPENT;
-		else{
-			Toast.makeText(this, "Please select an Algorithm to use", Toast.LENGTH_SHORT).show();
-			return;
-		}
+		RadioGroup rg = (RadioGroup)this.findViewById(R.id.radioGroup_algorithms);
+		int rid = rg.getCheckedRadioButtonId();
+		algorithm = ((RadioButton) rg.findViewById(rid)).getText().toString();
 			
-		Log.d(TAG,"Password: "+fPass+"\nFolder: "+dir_name+"\nAlgo: "+algorithm);
-			
-		Toast.makeText(this, "Created new OTF Encrypted Folder", Toast.LENGTH_SHORT).show();
-		int _id = setupFolder(dir, algorithm,fPass);
-		
-		/* setup the Bundles */
-		extras = new Bundle();
-		extras.putString(Constants.KEY_PASSWORD, fPass);
-		extras.putString(Constants.KEY_TARG_FILE, dir_name);
-		extras.putString(Constants.KEY_ALGORITHM, algorithm);
-		extras.putInt(Constants.KEY_ROW_ID, _id);
+		Log.d(TAG,"Password: "+passkey+"\nFolder: "+target.getPath()+"\nAlgo: "+algorithm);
+		Toast.makeText(this, "Created new Encrypted Folder", Toast.LENGTH_SHORT).show();
+		addFolderToDatabase();
 
+		// TODO: Use async task for this, so that no lag occurs
 		/* create dialog to prompt user to start encryption service now */
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage("Run encryption service on target folder now?")
@@ -171,70 +149,24 @@ public class NewFolderActivity extends Activity{
 			.setNegativeButton("No", startOtfeDialogListener)
 			.setTitle("Run Encryption Now?").show();
 	}
-	
-	/**
-	 * returns the final string to be used as password
-	 * returns empty string if no password has been set
-	 * returns NULL if re-type passwords do not match
-	 * @return
-	 */
-	private String getFinalPassword(){
-		String password = ((TextView) findViewById(R.id.edit_password)).getText().toString();
-		String password2 = ((TextView) findViewById(R.id.edit_password2)).getText().toString();
-		
-		Log.d(TAG,"PASS: *"+password+"*\nPAS2: *"+password2+"*");
-		if (password.isEmpty() && password2.isEmpty()){
-			if (!this.pattern.isEmpty())
-				return this.pattern;
-			return ""; //no password set
-		}else if (!password.isEmpty() && password.equals(password2))
-			return password;
-		
-		return null; //passwords do no match
-	}
+
 	/**
 	 * setups the SQL database and adds the new folder
 	 * @param f
 	 * @param algorithm
 	 */
-	private int setupFolder(File f, String algorithm, String password){
-		Log.d(TAG,"Setting up folder database");
-		FileLoggerDataSource file_ds = new FileLoggerDataSource(this,f.getName());
+	private void addFolderToDatabase(){
+		Log.d(TAG,"Setting up folder database, pattern?: "+isPattern);
+		FileLoggerDataSource file_ds = new FileLoggerDataSource(this,target.getName());
 		/* Adds the newly set up otfe folder to the FolderLog table */
-		FolderLog folderlog = this.folder_ds.createFolderLog(f,algorithm,
-				Encryptor.generateVerifyHash(password,algorithm));
+		FolderLog folderlog = this.folder_ds.createFolderLog(target,algorithm,
+				Encryptor.generateVerifyHash(passkey,algorithm), isPattern);
 		
 		/* Creates a new table that lists the files in the folder */
 		file_ds.open();
 		file_ds.close();
 		Log.d(TAG,"Folder Info added to database");
-		return (int) folderlog.getId();
-	}
-
-	/**
-	 * shows the pattern layout or password layout depending on what the user
-	 * selects
-	 * @param view
-	 */
-	public void toggleVisibility(View view){
-		findViewById(R.id.nef_key_options).setVisibility(View.INVISIBLE);
-		switch(view.getId()){
-			case R.id.btn_show_password:
-				/* set password layout to visible*/
-				findViewById(R.id.nef_password).setVisibility(View.VISIBLE);
-				break;
-			case R.id.btn_show_pattern:
-				/* call intent to ask for pattern */
-				showPattern(view);
-				findViewById(R.id.nef_pattern).setVisibility(View.VISIBLE);
-				break;
-			case R.id.btn_switch_to_pass:
-				/* switch from pattern to password */
-				findViewById(R.id.nef_pattern).setVisibility(View.INVISIBLE);
-				findViewById(R.id.nef_password).setVisibility(View.VISIBLE);
-				this.pattern="";
-				break;
-		}
+		_id = (int)folderlog.getId();
 	}
 	
 	/**
@@ -246,8 +178,14 @@ public class NewFolderActivity extends Activity{
 		public void onClick(DialogInterface dialog, int which) {
 			switch (which){
 	        case DialogInterface.BUTTON_POSITIVE:
-	        	/* Start Folder Service Listener */ 
-	        	FolderObserverIntentService.startObserving(getApplicationContext(), extras);
+	    		/* setup the Bundles used */
+	    		Bundle extras = new Bundle();
+	    		extras.putString(Constants.KEY_PASSWORD, passkey);
+	    		extras.putString(Constants.KEY_TARG_FILE, target.getPath());
+	    		extras.putString(Constants.KEY_ALGORITHM, algorithm);
+	    		extras.putInt(Constants.KEY_ROW_ID, _id);
+	    		/* Start Folder Service Listener */
+	        	FolderObserverService.startObserving(getApplicationContext(), extras);
 	            break;
 	        case DialogInterface.BUTTON_NEGATIVE:
 	            break;
@@ -258,13 +196,15 @@ public class NewFolderActivity extends Activity{
 	};
 	
 	/* close folder data source when stopped */
-	protected void onDestroy(){
-		super.onStop();
+	@Override
+	protected void onPause(){
+		super.onPause();
 		this.folder_ds.close();
 	}
 	/* open folder data source when started */
-	protected void onStart(){
-		super.onStart();
+	@Override
+	protected void onResume(){
+		super.onResume();
 		this.folder_ds.open();
 	}
 }

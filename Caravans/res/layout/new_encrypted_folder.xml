@@ -16,12 +16,12 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="25dp"
-        android:text="@string/folder_location"
+        android:text="@string/text_folder_location"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#dddddd" />
 
     <TextView
-        android:id="@+id/text_folder_address"
+        android:id="@+id/folder_to_encrypt"
         android:layout_width="230dp"
         android:layout_height="30dp"
         android:layout_alignLeft="@id/textView1"
@@ -40,177 +40,39 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="49.5dp"
-        android:layout_toRightOf="@id/text_folder_address"
-        android:contentDescription="@string/search"
-        android:onClick="browseFolder"
+        android:layout_toRightOf="@id/folder_to_encrypt"
+        android:contentDescription="@string/text_search"
+        android:onClick="onClick"
         android:src="@drawable/search"/>
 
-    <RelativeLayout
-        android:id="@+id/nef_center"
+	<include 
+	    android:id="@+id/security_input"
+	    layout="@layout/security_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/textView1"
-        android:layout_below="@id/text_folder_address"
-        android:layout_marginTop="20dp">
-
-		<LinearLayout
-            android:id="@+id/nef_key_options"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:orientation="vertical">
-            
-            <Button
-                android:id="@+id/btn_show_password"
-                android:layout_marginRight="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="toggleVisibility"
-                android:text="@string/text_password"/>
-            
-            <Button
-                android:id="@+id/btn_show_pattern"
-                android:layout_marginRight="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="toggleVisibility"
-                android:text="@string/text_pattern"/>
-		</LinearLayout>
-        
-        <LinearLayout
-            android:id="@+id/nef_password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/textView1"
-            android:orientation="vertical"
-            android:visibility="invisible">
-
-            <TextView
-                android:id="@+id/text_password"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_password"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#dddddd" />
-
-            <EditText
-                android:id="@+id/edit_password"
-                android:layout_width="230dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="7dp"
-                android:background="@drawable/input_style"
-                android:ems="10"
-                android:inputType="textPassword"
-                android:paddingLeft="10dp"
-                android:paddingRight="5dp" />
-
-            <TextView
-                android:id="@+id/text_password2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="@string/retype_password"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#dddddd" />
-
-            <EditText
-                android:id="@+id/edit_password2"
-                android:layout_width="230dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="7dp"
-                android:background="@drawable/input_style"
-                android:ems="10"
-                android:inputType="textPassword"
-                android:paddingLeft="10dp"
-                android:paddingRight="5dp" />
-        </LinearLayout>
-        
-		<RelativeLayout
-		    android:id="@+id/nef_pattern"
-		    android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_alignLeft="@id/textView1"
-            android:layout_marginTop="13dp"
-            android:visibility="invisible">
-          
-		    <TextView
-		        android:id="@+id/tv_pattern"
-		        android:layout_width="wrap_content"
-            	android:layout_height="wrap_content"
-            	android:layout_alignParentTop="true"
-            	android:layout_marginTop="20dp"
-            	android:layout_marginRight="5dp"
-            	android:text="@string/text_pattern_selected"
-            	android:textAppearance="?android:attr/textAppearanceMedium"
-        		android:textColor="#dddddd"/>
-
-	        <ImageButton
-	            android:id="@+id/browse_pattern"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_alignParentRight="true"
-	            android:layout_marginRight="7dp"
-	            android:layout_marginTop="9dp"
-	            android:contentDescription="@string/search"
-	            android:onClick="showPattern"
-	            android:src="@drawable/pattern" />
-	        
-	        <Button
-	            android:id="@+id/btn_switch_to_pass"
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content"
-	            android:layout_below="@id/tv_pattern"
-	            android:layout_marginTop="10dp"
-	            android:layout_marginRight="5dp"
-	            android:onClick="toggleVisibility"
-	            android:text="@string/switch_to_pass"/>
-		</RelativeLayout>
-		
-    </RelativeLayout>
-
+        android:layout_below="@id/folder_to_encrypt"
+        android:layout_marginTop="20dp"/>
+    
     <TextView
         android:id="@+id/text_algorithm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/textView1"
-        android:layout_below="@id/text_folder_address"
-        android:layout_marginTop="180dp"
+        android:layout_below="@id/security_input"
+        android:layout_marginTop="20dp"
         android:text="@string/text_algorithm"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#dddddd" />
-    
-   <RadioGroup
-        android:id="@+id/radioGroup_algo_nef"
-        android:layout_width="fill_parent"
+
+	<include
+	    android:id="@+id/radioGroup_algorithms" 
+	    layout="@layout/span_algorithm"
+		android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/textView1"
-        android:layout_below="@id/text_algorithm"
-        android:layout_marginTop="7dp"
-        android:orientation="horizontal" >
-
-        <RadioButton
-            android:id="@+id/radio_aes_nef"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/algorithm_aes"
-            android:textColor="#dddddd" />
-
-        <RadioButton
-            android:id="@+id/radio_two_fish_nef"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/algorithm_twofish"
-            android:textColor="#dddddd" />
-
-        <RadioButton
-            android:id="@+id/radio_serpent_nef"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/algorithm_serpent"
-            android:textColor="#dddddd" />
-    </RadioGroup>
-
+        android:layout_below="@id/text_algorithm"/>
+	
     <Button
         android:id="@+id/create_new_folder"
 		android:layout_width="match_parent"
@@ -220,7 +82,7 @@
         android:layout_alignRight="@id/browse_btn"
         android:layout_marginBottom="23dp"
 		android:layout_marginRight="5dp"
-        android:onClick="createNewFolder"
-        android:text="@string/new_folder_btn"/>
+        android:onClick="onClick"
+        android:text="@string/text_new_enc_folder"/>
    
 </RelativeLayout>

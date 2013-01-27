@@ -24,9 +24,9 @@ import android.widget.Toast;
 import com.otfe.caravans.Constants;
 import com.otfe.caravans.MainActivity;
 import com.otfe.caravans.R;
+import com.otfe.caravans.crypto.CryptoUtility;
 import com.otfe.caravans.crypto.Decryptor;
 import com.otfe.caravans.crypto.Encryptor;
-import com.otfe.caravans.crypto.Utility;
 
 /**
  * PerformanceTestService
@@ -88,13 +88,14 @@ public class PerformanceTestService extends Service{
 	    @Override
 	    public void handleMessage(Message msg) {
 	    	new Thread(){
-	    		public void run(){	
+	    		@Override
+				public void run(){	
 	    	try{
 	    		test_result.createNewFile();
 	    		FileWriter fw = new FileWriter(test_result);
 	    		bw = new BufferedWriter(fw);
 	    		bw.write(getDeviceInfo()+"\nFILE SIZE: "+
-	    			fsize+"\nSTART: "+Utility.getDate("HH:mm:ss"));
+	    			fsize+"\nSTART: "+CryptoUtility.getDate("HH:mm:ss"));
 	    		
 	    		/* ENCRYPTION */
 	    		String ok;
@@ -108,7 +109,7 @@ public class PerformanceTestService extends Service{
 		    		for (int i=0;i<test_count;i++){
 		    			updateNotification(max,++progress);
 		    			otfe = new Encryptor(password,targ_file.getAbsolutePath(),algo);
-		    			otfe.setDestFilePath((new File(dest_folder,"."+algo+".enc")).getAbsolutePath());
+		    			otfe.setDestinationFolder((new File(dest_folder,"."+algo+".enc")).getAbsolutePath());
 		    			otfe.doNotDelete();
 		    			pt = new PerformanceTester("");
 		    			ok = Boolean.toString(otfe.encrypt()).toUpperCase();
@@ -203,7 +204,7 @@ public class PerformanceTestService extends Service{
 		fsize = intent.getStringExtra(Constants.KEY_FILE_SIZE);
 		this.targ_file = new File(targ_path);
 		this.dest_folder = targ_file.getParentFile();
-		this.test_result = new File(dest_folder,"result_"+Utility.getDate("yy-MM-dd_HH-mm")+".txt");		
+		this.test_result = new File(dest_folder,"result_"+CryptoUtility.getDate("yy-MM-dd_HH-mm")+".txt");		
 		this.test_count = intent.getIntExtra(Constants.KEY_TEST_COUNT, 3);
 		
 		/* notification setup */
@@ -222,10 +223,11 @@ public class PerformanceTestService extends Service{
 		return null;
 	}
 	
+	@Override
 	public void onDestroy(){
 		super.onDestroy();
 		try{
-			bw.write("\nEND: "+Utility.getDate("HH:mm:ss"));
+			bw.write("\nEND: "+CryptoUtility.getDate("HH:mm:ss"));
 			bw.flush();
 			bw.close();
 		}catch(Exception e){}

@@ -35,7 +35,7 @@ import com.otfe.caravans.Constants;
  * Uses Spongy Castle Library
  * @author Ivan Dominic Baguio
  * @see com.otfe.caravans.crypto.Decryptor
- * @see com.otfe.caravans.crypto.Utility
+ * @see com.otfe.caravans.crypto.CryptoUtility
  * 
  * @since 1.0
  */
@@ -82,9 +82,9 @@ public class Encryptor{
     public Encryptor(String password, File target, String algo){
     	try{
             toEncrypt = target;
-            secretKey = Utility.getKey(password.toCharArray());
+            secretKey = CryptoUtility.getKey(password.toCharArray());
             algorithm = algo;
-            iv = Utility.generateIV(blockSize);
+            iv = CryptoUtility.generateIV(blockSize);
             if (!toEncrypt.isFile()){
             	ready = false;
             	Log.d(TAG, "File "+toEncrypt.getPath()+" is not valid");
@@ -96,12 +96,13 @@ public class Encryptor{
     }
     
     /**
-     * Sets the destination of the encrypted file manually
+     * Sets the destination folder of the encrypted file manually
      * @param path - file path where the encrypted file will be saved
      */
-    public void setDestFilePath(String path){
-    	Log.d(TAG, "New Enc Dest File: "+path);
-    	this.dest_file_path = path;
+    public void setDestinationFolder(String parent){
+    	Log.d(TAG, "Encryption Dest folder: "+parent);
+    	this.dest_file_path = CryptoUtility.getNewFilePath(toEncrypt, parent , 
+    			Constants.ENCRYPTED_FILE_EXTENSION);
     }
     
     /**
@@ -148,10 +149,11 @@ public class Encryptor{
     private void newEncryptedFile() throws Exception{
         /* checks if destination is already set, if not set default destination*/
         if (this.dest_file_path.equals(""))
-        	dest_file_path = Utility.getNewFilePath(this.toEncrypt,this.toEncrypt.getParent(),".enc");
+        	dest_file_path = CryptoUtility.getNewFilePath(this.toEncrypt,this.toEncrypt.getParent(),
+        			Constants.ENCRYPTED_FILE_EXTENSION);
         
         /* String representation of the file info, to be used as file headers */
-        String fileInfo = Utility.getFileType(this.toEncrypt) + Utility.getFileSize(this.toEncrypt);
+        String fileInfo = CryptoUtility.getFileType(this.toEncrypt) + CryptoUtility.getFileSize(this.toEncrypt);
         
         Log.d(TAG,"Fileinfo "+fileInfo);
 
@@ -166,7 +168,7 @@ public class Encryptor{
         encFos.write(iv);
         System.arraycopy(xtrue,0,headers,0,xtrue.length);//append VERIFY_STRING
         System.arraycopy(xinfo,0,headers,xtrue.length,xinfo.length);//append file info
-        Log.d(TAG,"HEADERS:"+Utility.byteToString(headers));
+        Log.d(TAG,"HEADERS:"+CryptoUtility.byteToString(headers));
         
         CipherInputStream cin = setEncrypt();
         int i, size = 0;
@@ -176,9 +178,10 @@ public class Encryptor{
         }
         encFos.close();
         Log.d(TAG,"WROTE "+size+ " bytes of ENC data");
-        Log.d(TAG,"TOTAL: "+(headers.length+size)+" bytes");
-        if (delete)
-        	Log.d(TAG,"Deleting "+this.toEncrypt.getName() +this.toEncrypt.delete());
+        if (delete){
+        	boolean d = toEncrypt.delete();
+        	Log.d(TAG,"Deleting "+toEncrypt.getName() +d);
+        }
     }
 
     /**
@@ -228,7 +231,7 @@ public class Encryptor{
         try{
             byte[] final_hash;
             //generate a random IV
-            byte iv[] = Utility.generateIV(16);
+            byte iv[] = CryptoUtility.generateIV(16);
             byte[] xtrue = Constants.VERIFY_STRING.getBytes();
             
             //the output stream of bytes where the encrypted bytes are written
@@ -238,7 +241,7 @@ public class Encryptor{
             Cipher cipher = Cipher.getInstance(algorithm+"/"+
         		Constants.BLOCK_CIPHER_MODE+"/PKCS5Padding",Constants.PROVIDER);
             IvParameterSpec ips = new IvParameterSpec(iv);
-            SecretKey secretK = Utility.getKey(password.toCharArray());
+            SecretKey secretK = CryptoUtility.getKey(password.toCharArray());
 
             //initialize the cipher to encrypt, using the IV and secret key
             cipher.init(Cipher.ENCRYPT_MODE,secretK,ips);

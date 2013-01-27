@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/radioGroup_algo_nef"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+	android:orientation="horizontal" >
+
+    <RadioButton
+    	android:id="@+id/radio_aes_nef"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="@string/algorithm_aes"
+        android:textColor="#dddddd" />
+
+	<RadioButton
+    	android:id="@+id/radio_two_fish_nef"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/algorithm_twofish"
+        android:textColor="#dddddd" />
+
+	<RadioButton
+    	android:id="@+id/radio_serpent_nef"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/algorithm_serpent"
+        android:textColor="#dddddd" />
+</RadioGroup>

@@ -16,7 +16,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="20dp"
-        android:text="@string/file_to_decrypt"
+        android:text="@string/text_file_to_decrypt"
         android:textColor="#dddddd"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -41,7 +41,7 @@
         android:layout_marginRight="5dp"
         android:layout_marginTop="44dp"
         android:layout_toRightOf="@id/file_to_decrypt"
-        android:contentDescription="@string/search"
+        android:contentDescription="@string/text_search"
         android:onClick="onClick"
         android:src="@drawable/search" />
 	
@@ -52,7 +52,7 @@
         android:layout_alignLeft="@+id/tv1"
         android:layout_below="@id/browse_for_decrypt_btn"
         android:layout_marginTop="18dp"
-        android:text="@string/dest_folder"
+        android:text="@string/text_dest_folder"
         android:textColor="#dddddd"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -77,7 +77,7 @@
         android:layout_marginRight="5dp"
         android:layout_marginTop="135dp"
         android:layout_toRightOf="@id/decrypt_dest"
-        android:contentDescription="@string/search"
+        android:contentDescription="@string/text_search"
         android:onClick="onClick"
         android:src="@drawable/search" />
 	
@@ -92,38 +92,20 @@
         android:textColor="#dddddd"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <LinearLayout android:id="@+id/layout_pass_patt"
-        android:orientation="horizontal"
+    <include layout="@layout/security_input" 
+        android:id="@+id/security_input"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+    	android:layout_height="wrap_content"
         android:layout_alignLeft="@id/tv1"
-        android:layout_below="@id/tv3"
-        android:layout_marginTop="7dp"
-        android:layout_marginRight="6dp">
-        
-        <Button
-            android:id="@+id/password_btn"
-            android:layout_width="0dp"
-        	android:layout_weight="1"
-        	android:layout_height="wrap_content"
-            android:text="@string/text_password"
-            android:onClick="onClick"/>
-        
-        <Button
-            android:id="@+id/pattern_btn"
-            android:layout_width="0dp"
-       	 	android:layout_weight="1"
-        	android:layout_height="wrap_content"
-            android:text="@string/text_pattern"
-            android:onClick="onClick"/>
-        
-    </LinearLayout>
+    	android:layout_below="@id/tv3"
+    	android:layout_marginTop="7dp"
+    	android:layout_marginRight="6dp"/>
 
 	<TextView android:id="@+id/tv4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tv1"
-        android:layout_below="@+id/layout_pass_patt"
+        android:layout_below="@id/security_input"
         android:layout_marginTop="18dp"
         android:text="@string/text_algorithm"
         android:textColor="#dddddd"
@@ -171,6 +153,7 @@
 			android:text="@string/algorithm_serpent"
 			android:textColor="#dddddd"/>
 	</RadioGroup>
+
     <Button
         android:id="@+id/single_decrypt_btn"
         android:layout_width="wrap_content"
@@ -181,5 +164,5 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:onClick="onClick"
-        android:text="@string/single_decrypt" />
+        android:text="@string/text_decrypt_file" />
 </RelativeLayout>

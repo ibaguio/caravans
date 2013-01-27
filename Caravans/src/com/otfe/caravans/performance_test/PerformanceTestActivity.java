@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import com.otfe.caravans.Constants;
 import com.otfe.caravans.R;
-import com.otfe.caravans.crypto.Utility;
+import com.otfe.caravans.crypto.CryptoUtility;
 
 public class PerformanceTestActivity extends Activity{	
 	private static final String TAG = "Performance Activity";
@@ -65,7 +65,7 @@ public class PerformanceTestActivity extends Activity{
 		long final_size = (long)(fSize * multiplier);
 		
 		/* create hidden test file */
-		String fname = ".test_"+Utility.getDate("yy-MM-dd_HH-mm")+".txt";
+		String fname = ".test_"+CryptoUtility.getDate("yy-MM-dd_HH-mm")+".txt";
 		File targ_file = new File(dest_folder,fname);
 		Log.d(TAG,"Creating test file");
 		try{
@@ -108,6 +108,7 @@ public class PerformanceTestActivity extends Activity{
 		}
 	}
 	
+	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data){
 		if (resultCode == RESULT_OK && requestCode==Constants.TASK_GET_DEST_FOLDER) {
 			File selected_file=null;

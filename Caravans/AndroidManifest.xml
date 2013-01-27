@@ -28,6 +28,10 @@
 	            android:value="com.otfe.caravans.MainActivity" />
         </activity>
         <activity
+            android:name=".EncryptSingleActivity"
+            android:label="@string/title_encrypt_single">
+        </activity>
+        <activity
             android:name=".DecryptSingleActivity"
             android:label="@string/title_decrypt_single">
         </activity>
@@ -43,6 +47,11 @@
             android:name=".ViewFoldersActivity"
             android:label="@string/title_view_folders">
         </activity>
+        <activity
+            android:name=".EncFolderActivity"
+            android:label="@string/title_enc_folder">
+        </activity>
+        
         <activity 
             android:name="group.pals.android.lib.ui.filechooser.FileChooserActivity" 
             android:configChanges="orientation|screenSize|keyboard|keyboardHidden" />
@@ -52,7 +61,7 @@
         <service android:name=".DecryptionService"/>
         <service android:name=".DecryptionIntentService"/>
         <service android:name=".EncryptionIntentService"/>
-        <service android:name=".FolderObserverIntentService"/>
+        <service android:name=".FolderObserverService"/>
         <service android:name=".performance_test.PerformanceTestService"/>
         <service android:name="group.pals.android.lib.ui.filechooser.services.LocalFileProvider" />
     </application>

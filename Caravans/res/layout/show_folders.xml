@@ -15,13 +15,14 @@
         android:paddingRight="6dp">
         
         <Button 
-            android:id="@+id/btn_start_all"
-            android:text="@string/text_start_all"
+            android:id="@+id/btn_refresh"
+            android:text="@string/text_refresh"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:paddingLeft="3dp"
-        	android:paddingRight="3dp"/>
+        	android:paddingRight="3dp"
+        	android:onClick="onClick"/>
         
         <Button 
             android:id="@+id/btn_stop_all"
@@ -30,7 +31,8 @@
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:paddingLeft="3dp"
-        	android:paddingRight="3dp"/>
+        	android:paddingRight="3dp"
+        	android:onClick="onClick"/>
     </LinearLayout>
     
     <ImageView
@@ -38,8 +40,7 @@
 	    android:src="@android:drawable/divider_horizontal_bright"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-	    android:scaleType="fitXY"
-	    />
+	    android:scaleType="fitXY"/>
     
     <ListView
         android:id="@android:id/list"

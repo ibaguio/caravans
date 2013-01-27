@@ -17,7 +17,7 @@
         android:layout_marginTop="29dp"
         android:onClick="onClick"
         android:src="@drawable/new_folder_plus"
-        android:contentDescription="@string/newEncFolder"/>
+        android:contentDescription="@string/text_add_new_enc_folder"/>
 
 	<ImageButton
 	    android:id="@+id/encrypt_btn"
@@ -28,7 +28,7 @@
 	    android:layout_toRightOf="@id/new_enc_folder_btn"
 	    android:onClick="onClick"
 	    android:src="@drawable/encrypt"
-	    android:contentDescription="@string/encrypt_file"/>
+	    android:contentDescription="@string/text_encrypt_file"/>
 	
 	<ImageButton
         android:id="@+id/decrypt_btn"
@@ -40,7 +40,7 @@
         android:layout_marginTop="20dp"
         android:onClick="onClick"
         android:src="@drawable/decrypt"
-        android:contentDescription="@string/decrypt_file"/>
+        android:contentDescription="@string/text_decrypt_file"/>
 	
 	<ImageButton
         android:id="@+id/folders_btn"
@@ -52,7 +52,7 @@
         android:layout_marginTop="20dp"
         android:onClick="onClick"
         android:src="@drawable/enc_folders"
-        android:contentDescription="@string/folders_desc"/>
+        android:contentDescription="@string/text_encrypted_folders"/>
 	
 	<ImageButton
         android:id="@+id/settings_btn"
@@ -64,18 +64,18 @@
         android:layout_marginTop="20dp"
         android:onClick="onClick"
         android:src="@drawable/settings" 
-        android:contentDescription="@string/settings"/>
+        android:contentDescription="@string/text_settings"/>
 	
-    <ImageButton
-        android:id="@+id/help_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/folders_btn"
-        android:layout_alignRight="@id/folders_btn"
-        android:layout_below="@id/folders_btn"
-        android:layout_marginTop="20dp"
-        android:onClick="onClick"
-        android:src="@drawable/help" 
-        android:contentDescription="@string/help_desc"/>
+<!--     <ImageButton -->
+<!--         android:id="@+id/help_btn" -->
+<!--         android:layout_width="wrap_content" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:layout_alignLeft="@id/folders_btn" -->
+<!--         android:layout_alignRight="@id/folders_btn" -->
+<!--         android:layout_below="@id/folders_btn" -->
+<!--         android:layout_marginTop="20dp" -->
+<!--         android:onClick="onClick" -->
+<!--         android:src="@drawable/help"  -->
+<!--         android:contentDescription="@string/text_encrypted_folders"/> -->
 	
 </RelativeLayout>

@@ -5,6 +5,13 @@
     android:orientation="vertical"
     android:background="@drawable/main_background">
     
+    <Button android:id="@+id/btn_reset" 
+        android:text="@string/text_reset"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:onClick="onClick"/>
+    
     <Button android:id="@+id/perf_test_button" 
         android:text="@string/title_performance_test"
         android:layout_width="fill_parent"

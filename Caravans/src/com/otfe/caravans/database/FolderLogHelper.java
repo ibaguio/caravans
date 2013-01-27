@@ -3,6 +3,7 @@ package com.otfe.caravans.database;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -12,11 +13,12 @@ import com.otfe.caravans.Constants;
  * @author Ivan Dominic Baguio
  */
 public class FolderLogHelper extends SQLiteOpenHelper {
+	private static final String TAG = "Folder LH";
 	public static final String COLUMN_ID = "_id";
-	public static final String DATABASE_NAME = "otfelogger.db";
 	public static final String TABLE_NAME = "folderlogger";
 	public static final String COLUMN_FOLDERNAME = "foldername";
 	public static final String COLUMN_ALGORITHM = "algorithm";
+	public static final String COLUMN_AUTH_TYPE = "type";//password type (0-pass,1-pattern)
 	public static final String COLUMN_HASH = "hash";
 	public static final String COLUMN_PATH = "path";
 	public static final String TABLE_CREATE = "CREATE TABLE " 
@@ -25,31 +27,33 @@ public class FolderLogHelper extends SQLiteOpenHelper {
 					COLUMN_PATH + " TEXT not NULL, " +
 					COLUMN_ALGORITHM + " TEXT not NULL," +
 					COLUMN_HASH + " BLOB not NULL, " +
+					COLUMN_AUTH_TYPE + " INT not NULL, " +
 					"UNIQUE("+COLUMN_PATH+"));";
 	
 	public FolderLogHelper(Context context){
-		super(context, DATABASE_NAME, null, Constants.DATABASE_VERSION);
+		super(context, Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION);
 		SQLiteDatabase db;
 		try {
-			Log.d("","Opening/creating database: "+DATABASE_NAME);
-            db = context.openOrCreateDatabase(DATABASE_NAME, Constants.DATABASE_VERSION, null);
+			Log.d(TAG,"Opening/creating database: "+Constants.DATABASE_NAME);
+            db = context.openOrCreateDatabase(Constants.DATABASE_NAME, Constants.DATABASE_VERSION, null);
             Cursor c = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
             if (!tableExist(c)){
-            	Log.d("Folder LH",TABLE_NAME+ " does not yet exist, creating it");
-            	this.onCreate(db);
+            	Log.d(TAG,TABLE_NAME+ " does not yet exist, creating it");
+            	onCreate(db);
             }else
-            	Log.d("Folder LH",TABLE_NAME+" exits. will continue");
-        } catch (Exception e) {
-        	e.printStackTrace();
+            	Log.d(TAG,TABLE_NAME+" exits. will continue");
+            db.close();
+        } catch (SQLiteException e) {
+        	//e.printStackTrace();
+        	Log.e(TAG,e.getMessage());
         }
 	}
 	
 	private boolean tableExist(Cursor c){
-		Log.d("Folder LH","checking if "+TABLE_NAME+" exists");
+		Log.d(TAG,"checking if "+TABLE_NAME+" exists");
 		if (c.moveToFirst()){
 	        while ( !c.isAfterLast() ){
 	        	String x = c.getString( c.getColumnIndex("name"));
-	        	Log.d("","**"+x);
 	        	if (x.equals(TABLE_NAME))
 	        		return true;
 	        	c.moveToNext();
@@ -60,13 +64,13 @@ public class FolderLogHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db){
-		Log.d("Folder LH","Creating "+TABLE_NAME);
+		Log.d(TAG,"Creating "+TABLE_NAME);
 		try{
 			db.execSQL(TABLE_CREATE);
-			Log.d("Folder LH","Created new table "+TABLE_NAME);
-		}catch(Exception e){
-			e.printStackTrace();
-			Log.d("Folder LH",""+e.toString());
+			Log.d(TAG,"Created new table "+TABLE_NAME);
+		}catch(SQLiteException e){
+			//e.printStackTrace();
+			Log.e(TAG,e.getMessage());
 		}
 	}
 
@@ -81,7 +85,7 @@ public class FolderLogHelper extends SQLiteOpenHelper {
 	
 	public static String[] getAllColumns(){
 		String[] ret = {COLUMN_ID,COLUMN_FOLDERNAME,COLUMN_PATH,
-				COLUMN_ALGORITHM,COLUMN_HASH};
+				COLUMN_ALGORITHM,COLUMN_HASH,COLUMN_AUTH_TYPE};
 		return ret;
 	}
 }

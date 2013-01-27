@@ -14,7 +14,8 @@
         <pathelement location="../../android-sdks/platforms/android-16/android.jar"/>
     </path>
     <path id="Android Dependencies.libraryclasspath">
-        <pathelement location="../android-filechooser/code/bin/code.jar"/>
+        <pathelement location="../android-filechooser/code/bin/filebrowser.jar"/>
+        <pathelement location="../LockPattern/bin/lockpattern.jar"/>
         <pathelement location="libs/scprov-jdk15on-1.47.0.2.jar"/>
         <pathelement location="libs/sc-light-jdk15on-1.47.0.2.jar"/>
         <pathelement location="libs/android-support-v4.jar"/>

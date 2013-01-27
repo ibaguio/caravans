@@ -7,54 +7,54 @@ import java.util.List;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.otfe.caravans.crypto.Utility;
+import com.otfe.caravans.crypto.CryptoUtility;
 
 public class FileLoggerDataSource {
-	private static final String TAG = "FileLoggerDS";
+	private static final String TAG = "File LDS";
 	private String TABLE_NAME;
 	private SQLiteDatabase database;
 	private FileLogHelper dbHelper;
 	private String[] allColumns = FileLogHelper.getAllColumns();
 	
 	public FileLoggerDataSource(Context context,String foldername){
-		Log.d("File LDS","New Instance created; foldername: "+foldername);
+		Log.d(TAG,"New Instance created; foldername: "+foldername);
 		TABLE_NAME = FileLogHelper.BASE_NAME + foldername.toLowerCase();
 		dbHelper = new FileLogHelper(context,foldername);
 	}
 	
-	public void open() throws SQLException{
-		Log.d("File LDS","Opened");
+	public void open(){
 		database = dbHelper.getWritableDatabase();
+		Log.d(TAG,"Opened "+database.getPath());
 	}
 	
 	public void close(){
-		Log.d("File LDS","Closed");
+		Log.d(TAG,"Closed");
 		dbHelper.close();
+		//database.close();
 	}
 	
 	public FileLog createFileLog(File f){
-		Log.d("File LDS","Creating new log");
+		Log.d(TAG,"Creating new log");
 		ContentValues values = new ContentValues();
 		String checksum="";
 		try{
-			checksum = Utility.byteToString(Utility.md5Sum(f));
+			checksum = CryptoUtility.byteToString(CryptoUtility.md5Sum(f));
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 		String filetype="none";
 		try{
-			filetype = Utility.getFileType(f);
+			filetype = CryptoUtility.getFileType(f);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		Log.d("File LDS","Filename "+f.getName()+"\nchecksum: "+checksum
+		Log.d(TAG,"Filename "+f.getName()+"\nchecksum: "+checksum
 				+"\nfiletype: "+filetype+ "\nfilesize: "+f.length());
 		
-		values.put(FileLogHelper.COLUMN_FILENAME, Utility.getRawFileName(f));
+		values.put(FileLogHelper.COLUMN_FILENAME, CryptoUtility.getRawFileName(f));
 		values.put(FileLogHelper.COLUMN_CHECKSUM, checksum);
 		values.put(FileLogHelper.COLUMN_FILESIZE, f.length());
 		values.put(FileLogHelper.COLUMN_LASTMOD, f.lastModified());
@@ -72,8 +72,8 @@ public class FileLoggerDataSource {
 	
 	public void deleteFileLog(FileLog fileLog){
 		long id = fileLog.getId();
-		Log.d("File LDS","Deleting fileLog with id: "+id);
-		Log.d("File LDS",fileLog.toString());
+		Log.d(TAG,"Deleting fileLog with id: "+id);
+		Log.d(TAG,fileLog.toString());
 		database.delete(TABLE_NAME, FileLogHelper.COLUMN_ID + " = " +id,null);
 	}
 	
@@ -91,12 +91,12 @@ public class FileLoggerDataSource {
 	}
 	
 	public FileLog getFileLog(String filename){
-		String query = "SELECT * FROM "+TABLE_NAME+" WHERE "+FileLogHelper.COLUMN_FILENAME + " = '"+filename+"'";
+		String query = "SELECT * FROM "+TABLE_NAME+" WHERE "+FileLogHelper.COLUMN_FILENAME + " =?";
 		Log.d(TAG, "Getting file Log\nquery: "+query);
-		Cursor c = database.rawQuery(query, null);
+		Cursor c = database.rawQuery(query, new String[]{filename});
 		c.moveToFirst();
 		if (c.getCount()==0){
-			Log.d("File LDS",filename+" is not found in table"+TABLE_NAME);
+			Log.d(TAG,filename+" is not found in table"+TABLE_NAME);
 			return null;
 		}
 		return cursorToFileLog(c);
